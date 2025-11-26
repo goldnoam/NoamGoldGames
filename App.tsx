@@ -95,6 +95,14 @@ const INITIAL_GAMES: Game[] = [
     description: 'Stack ingredients and serve the perfect burger before time runs out.',
     tags: ['Cooking', 'Time Management', 'Arcade'],
     createdAt: Date.now() - 10000
+  },
+  {
+    id: 'hotdog-game',
+    title: 'Hotdog Game',
+    url: 'https://hotdog-game.vercel.app/',
+    description: 'A fun and fast-paced game centered around everyone\'s favorite snack.',
+    tags: ['Arcade', 'Food', 'Casual'],
+    createdAt: Date.now() - 11000
   }
 ];
 
@@ -104,7 +112,7 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v2';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
