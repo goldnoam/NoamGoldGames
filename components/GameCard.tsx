@@ -32,11 +32,19 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden bg-slate-900 cursor-pointer" onClick={handlePlay}>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-800 z-10">
-            <svg className="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 z-10 transition-opacity duration-300">
+             <div className="relative flex items-center justify-center">
+                {/* Static Gamepad Icon */}
+                <svg className="w-10 h-10 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+                
+                {/* Orbital Spinner Animation */}
+                <svg className="absolute w-16 h-16 text-primary/40 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle className="opacity-10" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                  <path className="opacity-75" d="M4 12a8 8 0 018-8V2.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+             </div>
           </div>
         )}
         <img 
