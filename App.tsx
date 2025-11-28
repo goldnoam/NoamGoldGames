@@ -103,6 +103,14 @@ const INITIAL_GAMES: Game[] = [
     description: 'A fun and fast-paced game centered around everyone\'s favorite snack.',
     tags: ['Arcade', 'Food', 'Casual'],
     createdAt: Date.now() - 11000
+  },
+  {
+    id: 'fisherman-game',
+    title: 'Fisherman Game',
+    url: 'https://fishermangame.vercel.app/',
+    description: 'Cast your line, hook the biggest catch, and master the art of fishing.',
+    tags: ['Fishing', 'Simulation', 'Relaxing'],
+    createdAt: Date.now() - 12000
   }
 ];
 
@@ -110,9 +118,10 @@ const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery_v2';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v3';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -176,6 +185,14 @@ const App: React.FC = () => {
     game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const sortedGames = [...filteredGames].sort((a, b) => {
+    if (sortOrder === 'desc') {
+      return b.createdAt - a.createdAt; // Newest first
+    } else {
+      return a.createdAt - b.createdAt; // Oldest first
+    }
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-dark text-slate-100 font-sans selection:bg-primary/30">
       <Header onAddClick={() => setIsModalOpen(true)} />
@@ -183,7 +200,7 @@ const App: React.FC = () => {
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
         {/* Hero Section / Intro */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
             Your Ultimate <span className="text-primary">Web Game</span> Collection
           </h2>
@@ -206,10 +223,29 @@ const App: React.FC = () => {
           </div>
         </div>
 
+        {/* Toolbar: Count & Sort */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <p className="text-slate-400 text-sm font-medium">
+            Showing {sortedGames.length} game{sortedGames.length !== 1 ? 's' : ''}
+          </p>
+          <div className="flex items-center gap-3">
+            <label htmlFor="sortOrder" className="text-sm text-slate-400">Sort by:</label>
+            <select
+              id="sortOrder"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
+              className="bg-slate-800 text-slate-200 text-sm border border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-700 transition-colors"
+            >
+              <option value="desc">Newest First</option>
+              <option value="asc">Oldest First</option>
+            </select>
+          </div>
+        </div>
+
         {/* Gallery Grid */}
-        {filteredGames.length > 0 ? (
+        {sortedGames.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredGames.map(game => (
+            {sortedGames.map(game => (
               <GameCard key={game.id} game={game} onDelete={handleDeleteGame} />
             ))}
           </div>
