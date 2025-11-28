@@ -111,6 +111,22 @@ const INITIAL_GAMES: Game[] = [
     description: 'Cast your line, hook the biggest catch, and master the art of fishing.',
     tags: ['Fishing', 'Simulation', 'Relaxing'],
     createdAt: Date.now() - 12000
+  },
+  {
+    id: 'turbo-delivery',
+    title: 'Turbo Delivery',
+    url: 'https://turbogame.vercel.app/',
+    description: 'Race against time to deliver packages in this high-speed arcade game.',
+    tags: ['Arcade', 'Racing', 'Action'],
+    createdAt: Date.now() - 13000
+  },
+  {
+    id: 'hexa-memory',
+    title: 'HexaMemory',
+    url: 'https://hexa-memory.vercel.app',
+    description: 'Challenge your memory skills by matching pairs in this hexagonal puzzle game.',
+    tags: ['Puzzle', 'Memory', 'Strategy'],
+    createdAt: Date.now() - 14000
   }
 ];
 
@@ -121,7 +137,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery_v3';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v6';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
