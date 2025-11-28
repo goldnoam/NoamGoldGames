@@ -1,11 +1,6 @@
 import React from 'react';
-import { Button } from './Button';
 
-interface HeaderProps {
-  onAddClick: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({ onAddClick }) => {
+export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-dark/80 border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -21,14 +16,8 @@ export const Header: React.FC<HeaderProps> = ({ onAddClick }) => {
           </h1>
         </div>
         
+        {/* Placeholder for future nav or search if needed */}
         <div className="flex items-center gap-4">
-          <Button onClick={onAddClick} icon={
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          }>
-            Add Game
-          </Button>
         </div>
       </div>
     </header>

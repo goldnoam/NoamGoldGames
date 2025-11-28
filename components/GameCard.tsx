@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Game } from '../types';
-import { Button } from './Button';
 
 interface GameCardProps {
   game: Game;
-  onDelete: (id: string) => void;
 }
 
 const TAG_STYLES = [
@@ -35,7 +33,7 @@ const getTagStyle = (tag: string) => {
   return TAG_STYLES[Math.abs(hash) % TAG_STYLES.length];
 };
 
-export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
+export const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   
@@ -109,11 +107,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  };
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onDelete(game.id);
   };
 
   const liveThumbnail = game.thumbnailUrl || `https://image.thum.io/get/width/600/crop/800/noanimate/${game.url}`;
@@ -203,7 +196,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
             <span 
               key={tag} 
               title={tag}
-              className={`px-3 py-1 text-xs font-medium rounded-full border cursor-default transition-all duration-200 ${getTagStyle(tag)}`}
+              className={`px-3 py-1 text-xs font-medium rounded-full border cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${getTagStyle(tag)}`}
             >
               #{tag}
             </span>
@@ -212,14 +205,14 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
 
         {/* Actions */}
         <div className="pt-4 border-t border-slate-700 flex justify-between items-center">
-           <div className="flex items-center gap-3">
+           <div className="flex items-center gap-3 w-full">
              {/* Share Count Badge */}
              <div className="hidden sm:flex items-center text-slate-500 text-xs font-medium bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700/50" title="Total Shares">
                <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                {shareCount}
              </div>
 
-             <div className="flex space-x-1 items-center">
+             <div className="flex space-x-1 items-center ml-auto">
                <div className="relative group/tooltip">
                  <button 
                    onClick={handleShareTwitter} 
@@ -283,10 +276,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
                </div>
              </div>
            </div>
-           
-           <Button variant="danger" size="sm" onClick={handleDelete} className="opacity-0 group-hover:opacity-100 transition-opacity">
-             Delete
-           </Button>
         </div>
       </div>
     </div>

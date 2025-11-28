@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
-import { AddGameModal } from './components/AddGameModal';
-import { Game, GameFormData } from './types';
-import { generateGameMetadata } from './services/geminiService';
+import { Game } from './types';
 
 // Default initial data with user-specified games
 const INITIAL_GAMES: Game[] = [
@@ -132,7 +130,6 @@ const INITIAL_GAMES: Game[] = [
 
 const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
@@ -154,48 +151,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const saveGames = (newGames: Game[]) => {
-    setGames(newGames);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newGames));
-  };
-
-  const handleAddGame = async (formData: GameFormData) => {
-    let finalTags: string[] = ['New'];
-    let finalDescription = formData.description;
-
-    // If description is missing, try to auto-fill one last time silently
-    if (!finalDescription) {
-       try {
-         const metadata = await generateGameMetadata(formData.title, formData.url);
-         if (metadata) {
-            finalDescription = metadata.description;
-            finalTags = metadata.tags;
-         }
-       } catch (e) {
-         console.warn("Background generation failed", e);
-         finalDescription = "No description provided.";
-       }
-    }
-
-    const newGame: Game = {
-      id: crypto.randomUUID(),
-      title: formData.title,
-      url: formData.url,
-      thumbnailUrl: formData.thumbnailUrl,
-      description: finalDescription || 'Explore this amazing game.',
-      tags: finalTags,
-      createdAt: Date.now()
-    };
-
-    saveGames([newGame, ...games]);
-  };
-
-  const handleDeleteGame = (id: string) => {
-    if (window.confirm("Are you sure you want to remove this game from your gallery?")) {
-      saveGames(games.filter(g => g.id !== id));
-    }
-  };
-
   const filteredGames = games.filter(game => 
     game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -211,7 +166,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-dark text-slate-100 font-sans selection:bg-primary/30">
-      <Header onAddClick={() => setIsModalOpen(true)} />
+      <Header />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
@@ -262,28 +217,16 @@ const App: React.FC = () => {
         {sortedGames.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedGames.map(game => (
-              <GameCard key={game.id} game={game} onDelete={handleDeleteGame} />
+              <GameCard key={game.id} game={game} />
             ))}
           </div>
         ) : (
           <div className="text-center py-20 border border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
             <p className="text-slate-500 text-xl mb-4">No games found matching your search.</p>
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="text-primary hover:text-secondary font-medium hover:underline"
-            >
-              Add a new game to get started
-            </button>
           </div>
         )}
 
       </main>
-
-      <AddGameModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onAdd={handleAddGame} 
-      />
 
       <Footer />
     </div>
