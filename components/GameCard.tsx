@@ -7,6 +7,34 @@ interface GameCardProps {
   onDelete: (id: string) => void;
 }
 
+const TAG_STYLES = [
+  "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20",
+  "bg-orange-500/10 text-orange-400 border-orange-500/20 hover:bg-orange-500/20",
+  "bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20",
+  "bg-yellow-500/10 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/20",
+  "bg-lime-500/10 text-lime-400 border-lime-500/20 hover:bg-lime-500/20",
+  "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20",
+  "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20",
+  "bg-teal-500/10 text-teal-400 border-teal-500/20 hover:bg-teal-500/20",
+  "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20",
+  "bg-sky-500/10 text-sky-400 border-sky-500/20 hover:bg-sky-500/20",
+  "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
+  "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20",
+  "bg-violet-500/10 text-violet-400 border-violet-500/20 hover:bg-violet-500/20",
+  "bg-purple-500/10 text-purple-400 border-purple-500/20 hover:bg-purple-500/20",
+  "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20",
+  "bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20",
+  "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20",
+];
+
+const getTagStyle = (tag: string) => {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
+    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return TAG_STYLES[Math.abs(hash) % TAG_STYLES.length];
+};
+
 export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
   const [isLoading, setIsLoading] = useState(true);
   
@@ -61,7 +89,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
         <img 
           src={liveThumbnail} 
           alt={game.title} 
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           onLoad={() => setIsLoading(false)}
           onError={(e) => {
             setIsLoading(false);
@@ -87,7 +115,11 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
 
         <div className="flex flex-wrap gap-2 mb-4">
           {game.tags.map(tag => (
-            <span key={tag} className="px-2 py-1 text-xs font-medium rounded-md bg-slate-700 text-slate-300 border border-slate-600">
+            <span 
+              key={tag} 
+              title={tag}
+              className={`px-3 py-1 text-xs font-medium rounded-full border cursor-default transition-all duration-200 ${getTagStyle(tag)}`}
+            >
               #{tag}
             </span>
           ))}
@@ -99,7 +131,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
              <div className="relative group/tooltip">
                <button 
                  onClick={handleShareTwitter} 
-                 className="text-slate-400 hover:text-[#1DA1F2] transition-colors"
+                 className="text-slate-400 hover:text-[#1DA1F2] transition-all duration-200 transform hover:scale-125"
                >
                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
                </button>
@@ -111,7 +143,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
              <div className="relative group/tooltip">
                <button 
                  onClick={handleShareFacebook} 
-                 className="text-slate-400 hover:text-[#4267B2] transition-colors"
+                 className="text-slate-400 hover:text-[#4267B2] transition-all duration-200 transform hover:scale-125"
                >
                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                </button>
