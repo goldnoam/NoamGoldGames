@@ -85,27 +85,29 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
     window.open(url, '_blank');
   };
   
-  const handleShare = async (e: React.MouseEvent) => {
+  const handleNativeShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
     setShareCount(prev => prev + 1);
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: game.title,
-          text: `Check out ${game.title} on Noam Gold AI Games!`,
-          url: game.url,
-        });
-      } catch (err) {
-        console.error('Error sharing:', err);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(game.url);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch (err) {
-        console.error('Failed to copy:', err);
-      }
+    try {
+      await navigator.share({
+        title: game.title,
+        text: `Check out ${game.title} on Noam Gold AI Games!`,
+        url: game.url,
+      });
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShareCount(prev => prev + 1);
+    try {
+      await navigator.clipboard.writeText(game.url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
     }
   };
 
@@ -115,6 +117,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
   };
 
   const liveThumbnail = game.thumbnailUrl || `https://image.thum.io/get/width/600/crop/800/noanimate/${game.url}`;
+  const canShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   return (
     <div 
@@ -241,10 +244,26 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
                  </span>
                </div>
 
+               {/* Native Share Button (Conditional) */}
+               {canShare && (
+                 <div className="relative group/tooltip">
+                   <button 
+                     onClick={handleNativeShare} 
+                     className="text-slate-400 hover:text-white transition-all duration-200 transform hover:scale-125 p-1"
+                   >
+                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                   </button>
+                   <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-slate-900 border border-slate-700 rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+                     Share
+                   </span>
+                 </div>
+               )}
+
+               {/* Copy Link Button - Always visible, strict copy logic with animation */}
                <div className="relative group/tooltip flex items-center">
                  <button 
-                   onClick={handleShare} 
-                   className={`relative overflow-hidden transition-all duration-300 flex items-center justify-center ${
+                   onClick={handleCopyLink} 
+                   className={`relative overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
                      copied 
                        ? 'bg-emerald-500 text-white w-20 px-2 py-1 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] scale-105' 
                        : 'text-slate-400 hover:text-primary p-1 hover:scale-125 w-7'
@@ -253,12 +272,12 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onDelete }) => {
                    {copied ? (
                      <span className="text-[10px] font-bold uppercase tracking-wider animate-pulse whitespace-nowrap">Copied!</span>
                    ) : (
-                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                    )}
                  </button>
                  {!copied && (
                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-slate-900 border border-slate-700 rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
-                     Share Link
+                     Copy Link
                    </span>
                  )}
                </div>
