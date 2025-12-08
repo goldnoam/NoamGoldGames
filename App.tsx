@@ -125,6 +125,14 @@ const INITIAL_GAMES: Game[] = [
     description: 'Challenge your memory skills by matching pairs in this hexagonal puzzle game.',
     tags: ['Puzzle', 'Memory', 'Strategy'],
     createdAt: Date.now() - 14000
+  },
+  {
+    id: 'eggs-factory',
+    title: 'Eggs Factory',
+    url: 'https://eggs-factory-game.vercel.app',
+    description: 'Build and manage your own egg production empire in this fun factory simulation.',
+    tags: ['Simulation', 'Management', 'Tycoon'],
+    createdAt: Date.now() - 15000
   }
 ];
 
@@ -134,7 +142,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery_v6';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v7';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
