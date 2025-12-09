@@ -181,17 +181,17 @@ const App: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-dark text-slate-100 font-sans selection:bg-primary/30">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/30 transition-colors duration-300">
       <Header />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
         {/* Hero Section / Intro */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">
             Your Ultimate <span className="text-primary">Web Game</span> Collection
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
             Curate, play, and share your favorite browser-based games in one stunning, AI-powered gallery.
           </p>
           
@@ -200,11 +200,11 @@ const App: React.FC = () => {
             <input
               type="text"
               placeholder="Search games by title or tag..."
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-full px-6 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-12 backdrop-blur-sm"
+              className="w-full bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-full px-6 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-12 backdrop-blur-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <svg className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-4 top-3.5 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -212,16 +212,16 @@ const App: React.FC = () => {
 
         {/* Toolbar: Count & Sort */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <p className="text-slate-400 text-sm font-medium">
+          <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">
             Showing {sortedGames.length} game{sortedGames.length !== 1 ? 's' : ''}
           </p>
           <div className="flex items-center gap-3">
-            <label htmlFor="sortOrder" className="text-sm text-slate-400">Sort by:</label>
+            <label htmlFor="sortOrder" className="text-sm text-slate-600 dark:text-slate-400">Sort by:</label>
             <select
               id="sortOrder"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-              className="bg-slate-800 text-slate-200 text-sm border border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-700 transition-colors"
+              className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
             >
               <option value="desc">Newest First</option>
               <option value="asc">Oldest First</option>
@@ -237,8 +237,8 @@ const App: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 border border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
-            <p className="text-slate-500 text-xl mb-4">No games found matching your search.</p>
+          <div className="text-center py-20 border border-dashed border-slate-300 dark:border-slate-800 rounded-3xl bg-slate-100/50 dark:bg-slate-900/50">
+            <p className="text-slate-500 dark:text-slate-500 text-xl mb-4">No games found matching your search.</p>
           </div>
         )}
 

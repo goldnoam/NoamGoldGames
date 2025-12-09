@@ -6,23 +6,23 @@ interface GameCardProps {
 }
 
 const TAG_STYLES = [
-  "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20",
-  "bg-orange-500/10 text-orange-400 border-orange-500/20 hover:bg-orange-500/20",
-  "bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20",
-  "bg-yellow-500/10 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/20",
-  "bg-lime-500/10 text-lime-400 border-lime-500/20 hover:bg-lime-500/20",
-  "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20",
-  "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20",
-  "bg-teal-500/10 text-teal-400 border-teal-500/20 hover:bg-teal-500/20",
-  "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20",
-  "bg-sky-500/10 text-sky-400 border-sky-500/20 hover:bg-sky-500/20",
-  "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
-  "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20",
-  "bg-violet-500/10 text-violet-400 border-violet-500/20 hover:bg-violet-500/20",
-  "bg-purple-500/10 text-purple-400 border-purple-500/20 hover:bg-purple-500/20",
-  "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20",
-  "bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20",
-  "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20",
+  "bg-red-500/10 text-red-500 dark:text-red-400 border-red-500/20 hover:bg-red-500/20",
+  "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20 hover:bg-orange-500/20",
+  "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20",
+  "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/20",
+  "bg-lime-500/10 text-lime-600 dark:text-lime-400 border-lime-500/20 hover:bg-lime-500/20",
+  "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20 hover:bg-green-500/20",
+  "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20",
+  "bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20 hover:bg-teal-500/20",
+  "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20",
+  "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20 hover:bg-sky-500/20",
+  "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
+  "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20",
+  "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20 hover:bg-violet-500/20",
+  "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20 hover:bg-purple-500/20",
+  "bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20",
+  "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20 hover:bg-pink-500/20",
+  "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:bg-rose-500/20",
 ];
 
 const getTagStyle = (tag: string) => {
@@ -114,16 +114,16 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
   return (
     <div 
-      className="group relative bg-card rounded-xl border border-slate-700 shadow-lg hover:shadow-primary/20 hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer"
+      className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-primary/20 hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer"
       onClick={handlePlay}
     >
       {/* Image Container */}
-      <div className="relative h-48 overflow-hidden rounded-t-xl bg-slate-900">
+      <div className="relative h-48 overflow-hidden rounded-t-xl bg-slate-200 dark:bg-slate-900">
         {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 z-10 transition-opacity duration-300">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-200 dark:bg-slate-800 z-10 transition-opacity duration-300">
              <div className="relative flex items-center justify-center">
                 {/* Static Gamepad Icon */}
-                <svg className="w-10 h-10 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-10 h-10 text-slate-400 dark:text-slate-600" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
                 </svg>
                 
@@ -136,9 +136,9 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           </div>
         )}
         
-        {/* New Badge */}
+        {/* New Badge - Hides on hover to not obstruct tooltip */}
         {isNew && (
-          <div className="absolute top-2 left-2 z-20">
+          <div className="absolute top-2 left-2 z-20 transition-opacity duration-300 group-hover:opacity-0">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
@@ -160,12 +160,22 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           }}
         />
         
-        {/* Hover Overlay */}
-        <div className={`absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center ${isLoading ? 'hidden' : ''}`}>
-           <span className="bg-primary text-white px-4 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
+        {/* Hover Overlay with Play Button */}
+        <div className={`absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center ${isLoading ? 'hidden' : ''} z-10`}>
+           <span className="bg-primary text-white px-4 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:scale-105 hover:bg-secondary">
              Play Now
            </span>
         </div>
+
+        {/* Thumbnail Tooltip - Appears on Hover */}
+        {!isLoading && (
+          <div className="absolute top-0 inset-x-0 p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none transform -translate-y-2 group-hover:translate-y-0">
+            <div className="bg-slate-900/95 dark:bg-black/90 backdrop-blur-md border border-slate-700/50 p-3 rounded-lg shadow-2xl">
+              <h4 className="font-bold text-white text-sm mb-1 line-clamp-1">{game.title}</h4>
+              <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{game.description}</p>
+            </div>
+          </div>
+        )}
 
         {/* Live Viewers Count Badge */}
         <div className="absolute bottom-2 right-2 z-20 pointer-events-none">
@@ -184,10 +194,10 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-xl font-bold text-white truncate pr-2" title={game.title}>{game.title}</h3>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
         </div>
         
-        <p className="text-slate-400 text-sm mb-4 line-clamp-3 flex-grow">
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-grow">
           {game.description}
         </p>
 
@@ -204,10 +214,10 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
         </div>
 
         {/* Actions */}
-        <div className="pt-4 border-t border-slate-700 flex justify-between items-center">
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
            <div className="flex items-center gap-3 w-full">
              {/* Share Count Badge */}
-             <div className="hidden sm:flex items-center text-slate-500 text-xs font-medium bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700/50" title="Total Shares">
+             <div className="hidden sm:flex items-center text-slate-600 dark:text-slate-500 text-xs font-medium bg-slate-100 dark:bg-slate-800/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700/50" title="Total Shares">
                <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                {shareCount}
              </div>
@@ -242,7 +252,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
                  <div className="relative group/tooltip">
                    <button 
                      onClick={handleNativeShare} 
-                     className="text-slate-400 hover:text-white transition-all duration-200 transform hover:scale-125 p-1"
+                     className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-all duration-200 transform hover:scale-125 p-1"
                    >
                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                    </button>
