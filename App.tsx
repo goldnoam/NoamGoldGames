@@ -133,6 +133,14 @@ const INITIAL_GAMES: Game[] = [
     description: 'Build and manage your own egg production empire in this fun factory simulation.',
     tags: ['Simulation', 'Management', 'Tycoon'],
     createdAt: Date.now() - 15000
+  },
+  {
+    id: 'city-guards',
+    title: 'City Guards Game',
+    url: 'https://city-guard-game.vercel.app/',
+    description: 'Protect the city from relentless attacks in this exciting strategy defense game.',
+    tags: ['Strategy', 'Defense', 'Action'],
+    createdAt: Date.now() - 16000
   }
 ];
 
@@ -142,7 +150,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery_v7';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v8';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
