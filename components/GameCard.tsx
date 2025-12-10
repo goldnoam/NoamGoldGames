@@ -197,7 +197,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
         </div>
         
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-grow">
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-grow" title={game.description}>
           {game.description}
         </p>
 
