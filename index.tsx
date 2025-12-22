@@ -16,8 +16,17 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
+/**
+ * Fixed TS error: Properly handle props and state by using a constructor.
+ * This ensures that property inheritance from React.Component is correctly 
+ * recognized by the TypeScript compiler.
+ */
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false };
+  // Explicitly defining the constructor fixes "Property 'props' does not exist" errors
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(_: Error): ErrorBoundaryState {
     return { hasError: true };
@@ -28,6 +37,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   render() {
+    // Accessing this.state works with the constructor initialized state
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-4">
@@ -45,7 +55,19 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       );
     }
 
+    // Accessing this.props.children now works with explicit inheritance handling
     return this.props.children;
+  }
+}
+
+// Check for stored theme preference or default to dark
+if (typeof document !== 'undefined') {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
+    // Default or explicitly dark
+    document.documentElement.classList.add('dark');
   }
 }
 

@@ -39,17 +39,15 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
   
   // Generate a random stable number of viewers between 100 and 5000
   const viewers = useMemo(() => {
-    // Simple hash of the ID to seed the random number so it's consistent for the same game
     let hash = 0;
     for (let i = 0; i < game.id.length; i++) {
       hash = ((hash << 5) - hash) + game.id.charCodeAt(i);
       hash |= 0;
     }
     const seed = Math.abs(hash);
-    return 100 + (seed % 4901); // 100 to 5000
+    return 100 + (seed % 4901);
   }, [game.id]);
 
-  // Generate a random stable number of shares between 10 and 200
   const [shareCount, setShareCount] = useState(() => {
     let hash = 0;
     for (let i = 0; i < game.id.length; i++) {
@@ -114,7 +112,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
   return (
     <div 
-      className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-primary/20 hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer"
+      className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-[0_0_25px_rgba(99,102,241,0.25)] dark:hover:shadow-[0_0_35px_rgba(168,85,247,0.15)] hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer"
       onClick={handlePlay}
     >
       {/* Image Container */}
@@ -122,12 +120,9 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-200 dark:bg-slate-800 z-10 transition-opacity duration-300">
              <div className="relative flex items-center justify-center">
-                {/* Static Gamepad Icon */}
                 <svg className="w-10 h-10 text-slate-400 dark:text-slate-600" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
                 </svg>
-                
-                {/* Orbital Spinner Animation */}
                 <svg className="absolute w-16 h-16 text-primary/40 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle className="opacity-10" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                   <path className="opacity-75" d="M4 12a8 8 0 018-8V2.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
@@ -136,7 +131,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           </div>
         )}
         
-        {/* New Badge - Hides on hover to not obstruct tooltip */}
         {isNew && (
           <div className="absolute top-2 left-2 z-20 transition-opacity duration-300 group-hover:opacity-0">
             <span className="relative flex h-3 w-3">
@@ -160,14 +154,13 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           }}
         />
         
-        {/* Hover Overlay with Play Button */}
         <div className={`absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center ${isLoading ? 'hidden' : ''} z-10`}>
            <span className="bg-primary text-white px-4 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:scale-105 hover:bg-secondary">
              Play Now
            </span>
         </div>
 
-        {/* Thumbnail Tooltip - Appears on Hover */}
+        {/* Thumbnail Tooltip */}
         {!isLoading && (
           <div className="absolute top-0 inset-x-0 p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none transform -translate-y-2 group-hover:translate-y-0">
             <div className="bg-slate-900/95 dark:bg-black/90 backdrop-blur-md border border-slate-700/50 p-3 rounded-lg shadow-2xl">
@@ -177,7 +170,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           </div>
         )}
 
-        {/* Live Viewers Count Badge */}
         <div className="absolute bottom-2 right-2 z-20 pointer-events-none">
           <div className="bg-black/70 backdrop-blur-md border border-white/10 px-2 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
             <span className="relative flex h-2 w-2">
@@ -197,9 +189,23 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
         </div>
         
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-grow" title={game.description}>
-          {game.description}
-        </p>
+        {/* Description with Styled Tooltip */}
+        <div className="relative group/desc-tooltip mb-4 flex-grow">
+          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden cursor-help">
+            {game.description}
+          </p>
+          
+          {/* Tooltip Popup */}
+          <div className="absolute bottom-full left-0 mb-3 w-64 md:w-72 lg:w-80 opacity-0 group-hover/desc-tooltip:opacity-100 transition-all duration-300 pointer-events-none z-50 transform translate-y-2 group-hover/desc-tooltip:translate-y-0">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 relative">
+              <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
+                {game.description}
+              </p>
+              {/* Tooltip arrow */}
+              <div className="absolute -bottom-2 left-6 w-4 h-4 bg-white dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+            </div>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {game.tags.map(tag => (
@@ -216,7 +222,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
         {/* Actions */}
         <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
            <div className="flex items-center gap-3 w-full">
-             {/* Share Count Badge */}
              <div className="hidden sm:flex items-center text-slate-600 dark:text-slate-500 text-xs font-medium bg-slate-100 dark:bg-slate-800/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700/50" title="Total Shares">
                <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                {shareCount}
@@ -247,7 +252,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
                  </span>
                </div>
 
-               {/* Native Share Button (Conditional) */}
                {canShare && (
                  <div className="relative group/tooltip">
                    <button 
@@ -262,7 +266,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
                  </div>
                )}
 
-               {/* Copy Link Button - Always visible, strict copy logic with animation */}
                <div className="relative group/tooltip flex items-center">
                  <button 
                    onClick={handleCopyLink} 

@@ -4,22 +4,22 @@ import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
 import { Game } from './types';
 
-// Default initial data with user-specified games
+// Default initial data with AI-specific games removed as requested for production
 const INITIAL_GAMES: Game[] = [
+  {
+    id: 'sudoku-game',
+    title: 'Suduku Game',
+    url: 'https://sudokusudoku.vercel.app/',
+    description: 'Classic Sudoku puzzle game. Challenge your logic and fill the grid with numbers 1 to 9.',
+    tags: ['Puzzle', 'Logic', 'Strategy'],
+    createdAt: Date.now()
+  },
   {
     id: 'dig-game',
     title: 'Dig Game',
     url: 'https://diggame.vercel.app',
     description: 'Exciting digging adventure. Uncover hidden treasures beneath the surface.',
     tags: ['Adventure', 'Action', 'Arcade'],
-    createdAt: Date.now()
-  },
-  {
-    id: 'nego-ai',
-    title: 'Nego AI',
-    url: 'https://negoai.vercel.app/',
-    description: 'Challenge an advanced AI in this strategic negotiation simulation.',
-    tags: ['AI', 'Strategy', 'Simulation'],
     createdAt: Date.now() - 1000
   },
   {
@@ -28,7 +28,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://astrogame.vercel.app/',
     description: 'Navigate the cosmos and survive the dangers of deep space.',
     tags: ['Space', 'Sci-Fi', 'Action'],
-    createdAt: Date.now() - 2000
+    createdAt: Date.now() - 3000
   },
   {
     id: 'chips-game',
@@ -36,7 +36,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://chipsgame.vercel.app/',
     description: 'A strategic puzzle game. Stack, bet, and win with chips.',
     tags: ['Puzzle', 'Strategy', 'Board'],
-    createdAt: Date.now() - 3000
+    createdAt: Date.now() - 4000
   },
   {
     id: 'charity-game',
@@ -44,7 +44,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://charitygame.vercel.app/',
     description: 'Make a difference in the world through this philanthropic simulation.',
     tags: ['Simulation', 'Social', 'Educational'],
-    createdAt: Date.now() - 4000
+    createdAt: Date.now() - 5000
   },
   {
     id: 'ski-game',
@@ -52,7 +52,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://skigame.vercel.app/',
     description: 'Hit the slopes! Dodge obstacles and race to the finish line.',
     tags: ['Sports', 'Winter', 'Action'],
-    createdAt: Date.now() - 5000
+    createdAt: Date.now() - 6000
   },
   {
     id: 'zombie-survival',
@@ -60,7 +60,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://zombie.vercel.app/',
     description: 'Fight for survival against hordes of zombies in this intense game.',
     tags: ['Horror', 'Survival', 'Action'],
-    createdAt: Date.now() - 6000
+    createdAt: Date.now() - 7000
   },
   {
     id: 'pizza-ng',
@@ -68,7 +68,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://pizzang.vercel.app/',
     description: 'Become a master chef and bake the most delicious pizzas.',
     tags: ['Cooking', 'Simulation', 'Fun'],
-    createdAt: Date.now() - 7000
+    createdAt: Date.now() - 8000
   },
   {
     id: 'chemistry-game',
@@ -76,7 +76,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://chemistrygame.vercel.app/',
     description: 'Explore chemical reactions and elements in a safe virtual lab.',
     tags: ['Science', 'Educational', 'Puzzle'],
-    createdAt: Date.now() - 8000
+    createdAt: Date.now() - 9000
   },
   {
     id: 'shoe-laces',
@@ -84,7 +84,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://shoe-laces.vercel.app/',
     description: 'Master the art of tying shoe laces with various techniques.',
     tags: ['Educational', 'Life Skills', 'Casual'],
-    createdAt: Date.now() - 9000
+    createdAt: Date.now() - 10000
   },
   {
     id: 'make-burger',
@@ -92,7 +92,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://makeburger.vercel.app',
     description: 'Stack ingredients and serve the perfect burger before time runs out.',
     tags: ['Cooking', 'Time Management', 'Arcade'],
-    createdAt: Date.now() - 10000
+    createdAt: Date.now() - 11000
   },
   {
     id: 'hotdog-game',
@@ -100,7 +100,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://hotdog-game.vercel.app/',
     description: 'A fun and fast-paced game centered around everyone\'s favorite snack.',
     tags: ['Arcade', 'Food', 'Casual'],
-    createdAt: Date.now() - 11000
+    createdAt: Date.now() - 12000
   },
   {
     id: 'fisherman-game',
@@ -108,7 +108,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://fishermangame.vercel.app/',
     description: 'Cast your line, hook the biggest catch, and master the art of fishing.',
     tags: ['Fishing', 'Simulation', 'Relaxing'],
-    createdAt: Date.now() - 12000
+    createdAt: Date.now() - 13000
   },
   {
     id: 'turbo-delivery',
@@ -116,7 +116,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://turbogame.vercel.app/',
     description: 'Race against time to deliver packages in this high-speed arcade game.',
     tags: ['Arcade', 'Racing', 'Action'],
-    createdAt: Date.now() - 13000
+    createdAt: Date.now() - 14000
   },
   {
     id: 'hexa-memory',
@@ -124,7 +124,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://hexa-memory.vercel.app',
     description: 'Challenge your memory skills by matching pairs in this hexagonal puzzle game.',
     tags: ['Puzzle', 'Memory', 'Strategy'],
-    createdAt: Date.now() - 14000
+    createdAt: Date.now() - 15000
   },
   {
     id: 'eggs-factory',
@@ -132,7 +132,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://eggs-factory-game.vercel.app',
     description: 'Build and manage your own egg production empire in this fun factory simulation.',
     tags: ['Simulation', 'Management', 'Tycoon'],
-    createdAt: Date.now() - 15000
+    createdAt: Date.now() - 16000
   },
   {
     id: 'city-guards',
@@ -140,7 +140,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://city-guard-game.vercel.app/',
     description: 'Protect the city from relentless attacks in this exciting strategy defense game.',
     tags: ['Strategy', 'Defense', 'Action'],
-    createdAt: Date.now() - 16000
+    createdAt: Date.now() - 17000
   }
 ];
 
@@ -149,8 +149,8 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
-  // Using a new key to ensure the new list loads for the user
-  const STORAGE_KEY = 'noam_gold_games_gallery_v8';
+  // Incremented storage key to v10 to force reload of the non-AI game list
+  const STORAGE_KEY = 'noam_gold_games_gallery_v10';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -192,7 +192,7 @@ const App: React.FC = () => {
             Your Ultimate <span className="text-primary">Web Game</span> Collection
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-            Curate, play, and share your favorite browser-based games in one stunning, AI-powered gallery.
+            Curate, play, and share your favorite browser-based games in one stunning, streamlined gallery.
           </p>
           
           {/* Search Bar */}
