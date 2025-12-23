@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Game } from '../types';
 
@@ -115,7 +114,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
 
   return (
     <div 
-      className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-[0_0_25px_rgba(99,102,241,0.25)] dark:hover:shadow-[0_0_35px_rgba(168,85,247,0.15)] hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer"
+      className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-[0_0_30px_rgba(99,102,241,0.35)] dark:hover:shadow-[0_0_40px_rgba(168,85,247,0.25)] hover:border-primary/60 dark:hover:border-primary/40 hover:ring-2 hover:ring-primary/20 dark:hover:ring-secondary/20 hover:-translate-y-2 hover:z-30 transition-all duration-300 flex flex-col h-full cursor-pointer"
       onClick={handlePlay}
     >
       {/* Image Container */}
@@ -163,7 +162,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
            </span>
         </div>
 
-        {/* Thumbnail Tooltip */}
+        {/* Thumbnail Info Overlay (Small Tooltip) */}
         {!isLoading && (
           <div className="absolute top-0 inset-x-0 p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none transform -translate-y-2 group-hover:translate-y-0">
             <div className="bg-slate-900/95 dark:bg-black/90 backdrop-blur-md border border-slate-700/50 p-3 rounded-lg shadow-2xl">
@@ -192,20 +191,24 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
           <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
         </div>
         
-        {/* Description with Styled Tooltip */}
+        {/* Description with Full Tooltip */}
         <div className="relative group/desc-tooltip mb-4 flex-grow">
-          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden cursor-help">
+          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden cursor-help group-hover/desc-tooltip:text-slate-900 dark:group-hover/desc-tooltip:text-slate-100 transition-colors">
             {game.description}
           </p>
           
-          {/* Tooltip Popup */}
-          <div className="absolute bottom-full left-0 mb-3 w-64 md:w-72 lg:w-80 opacity-0 group-hover/desc-tooltip:opacity-100 transition-all duration-300 pointer-events-none z-50 transform translate-y-2 group-hover/desc-tooltip:translate-y-0">
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 relative">
+          {/* Detailed Tooltip Popup */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 md:w-72 lg:w-80 opacity-0 group-hover/desc-tooltip:opacity-100 transition-all duration-300 pointer-events-none z-[60] transform translate-y-4 group-hover/desc-tooltip:translate-y-0 scale-95 group-hover/desc-tooltip:scale-100">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-slate-700 relative">
+              <div className="text-xs font-bold text-primary dark:text-secondary uppercase tracking-widest mb-2 flex items-center gap-2">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Game Details
+              </div>
               <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
                 {game.description}
               </p>
               {/* Tooltip arrow */}
-              <div className="absolute -bottom-2 left-6 w-4 h-4 bg-white dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 transform rotate-45"></div>
             </div>
           </div>
         </div>
