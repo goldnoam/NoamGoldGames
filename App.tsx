@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -322,38 +321,53 @@ const App: React.FC = () => {
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
             Curate, play, and share your favorite browser-based games in one stunning, streamlined gallery.
           </p>
+        </div>
+
+        {/* Toolbar: Search & Sort Bar directly above the grid */}
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col md:flex-row items-center gap-4 sticky top-24 z-30">
           
-          {/* Search Bar */}
-          <div className="mt-8 max-w-md mx-auto relative">
+          {/* Search Input */}
+          <div className="relative flex-grow w-full md:w-auto">
             <input
               type="text"
               placeholder="Search games by title or tag..."
-              className="w-full bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-full px-6 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-12 backdrop-blur-sm shadow-inner"
+              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-11 pr-10 shadow-inner"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <svg className="absolute left-4 top-3.5 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3.5 top-3 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-2.5 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 transition-colors"
+                title="Clear search"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
-        </div>
 
-        {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">
-            Showing {sortedGames.length} game{sortedGames.length !== 1 ? 's' : ''}
-          </p>
-          <div className="flex items-center gap-3">
-            <label htmlFor="sortOrder" className="text-sm text-slate-600 dark:text-slate-400">Sort by:</label>
-            <select
-              id="sortOrder"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-              className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-            >
-              <option value="desc">Newest First</option>
-              <option value="asc">Oldest First</option>
-            </select>
+          <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+            <p className="text-slate-600 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
+              {sortedGames.length} Result{sortedGames.length !== 1 ? 's' : ''}
+            </p>
+            
+            <div className="flex items-center gap-2">
+              <label htmlFor="sortOrder" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter">Sort:</label>
+              <select
+                id="sortOrder"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
+                className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
+              >
+                <option value="desc">Newest First</option>
+                <option value="asc">Oldest First</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -369,8 +383,20 @@ const App: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 border border-dashed border-slate-300 dark:border-slate-800 rounded-3xl bg-slate-100/50 dark:bg-slate-900/50">
-            <p className="text-slate-500 dark:text-slate-500 text-xl mb-4">No games found matching your search.</p>
+          <div className="text-center py-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/30">
+            <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-slate-400 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No games found</h3>
+            <p className="text-slate-500 dark:text-slate-500 mb-6">We couldn't find anything matching "{searchQuery}"</p>
+            <button 
+              onClick={() => setSearchQuery('')}
+              className="text-primary hover:text-secondary font-bold underline transition-colors"
+            >
+              Clear search and try again
+            </button>
           </div>
         )}
 

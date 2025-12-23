@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -22,14 +21,16 @@ interface ErrorBoundaryState {
  * Explicitly defining state and props to resolve TypeScript "does not exist" errors.
  */
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // Define state property to fix TS error: Property 'state' does not exist on type 'ErrorBoundary'
-  public override state: ErrorBoundaryState;
-  // Define props property to fix TS error: Property 'props' does not exist on type 'ErrorBoundary'
-  public override props: ErrorBoundaryProps;
+  // Fix: Removed 'override' modifier as it was causing compilation errors. 
+  // Redefining state and props manually here as per user's original implementation to resolve specific TS environment issues.
+  public state: ErrorBoundaryState;
+  // Fix: Removed 'override' modifier as it was causing compilation errors.
+  public props: ErrorBoundaryProps;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
+    // Redundant assignment kept to maintain user's specific state/props handling logic while fixing errors.
     this.props = props;
   }
 
