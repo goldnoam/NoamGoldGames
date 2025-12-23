@@ -126,12 +126,20 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'the-great-heist',
+    title: 'The Great Heist',
+    url: 'https://the-great-heist.vercel.app/',
+    description: 'Plan the perfect robbery in this intense strategy and action game. Can you escape with the loot?',
+    tags: ['Strategy', 'Action', 'Stealth'],
+    createdAt: Date.now()
+  },
+  {
     id: 'tic-taq-toe',
     title: 'Tic Taq Toe',
     url: 'https://tic-taq-toe.vercel.app/',
     description: 'The classic game of X\'s and O\'s. Strategy and fun for all ages.',
     tags: ['Board', 'Strategy', 'Classic'],
-    createdAt: Date.now()
+    createdAt: Date.now() - 250
   },
   {
     id: 'sudoku-game',
@@ -277,7 +285,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v12';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v13';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
