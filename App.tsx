@@ -1,18 +1,146 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
 import { Game } from './types';
 
-// Default initial data with AI-specific games removed as requested for production
+// Game Overlay Component for in-app play with controls
+const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onClose }) => {
+  const [isPaused, setIsPaused] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const handleReset = () => {
+    if (iframeRef.current) {
+      // Logic to reload the game
+      iframeRef.current.src = iframeRef.current.src;
+    }
+  };
+
+  const simulateKey = (key: string) => {
+    if (iframeRef.current?.contentWindow) {
+      // Note: This only works if the target game is configured to listen to postMessages
+      // or if it's on the same origin. For external games, we provide the UI.
+      iframeRef.current.contentWindow.postMessage({ type: 'keydown', key }, '*');
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black flex flex-col animate-fade-in">
+      {/* Game Bar */}
+      <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+            title="Back to Gallery"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+          <div>
+            <h3 className="text-white font-bold leading-tight">{game.title}</h3>
+            <p className="text-slate-500 text-xs hidden sm:block">Noam Gold Premium Arcade</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button 
+            onClick={() => setIsPaused(!isPaused)}
+            className={`px-4 py-1.5 rounded-lg font-bold text-sm transition-all ${isPaused ? 'bg-primary text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+          >
+            {isPaused ? 'RESUME' : 'PAUSE'}
+          </button>
+          <button 
+            onClick={handleReset}
+            className="px-4 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-bold text-sm transition-all"
+          >
+            RESET
+          </button>
+        </div>
+      </div>
+
+      {/* Main Viewport */}
+      <div className="relative flex-grow bg-black overflow-hidden flex items-center justify-center">
+        {isPaused && (
+          <div className="absolute inset-0 z-20 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mb-4 animate-pulse">
+               <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 4h4v16H6V4zm8 0h4v16h4V4z" />
+               </svg>
+            </div>
+            <h2 className="text-3xl font-black text-white tracking-widest uppercase">Paused</h2>
+            <button 
+              onClick={() => setIsPaused(false)}
+              className="mt-8 bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
+            >
+              Resume Game
+            </button>
+          </div>
+        )}
+        <iframe 
+          ref={iframeRef}
+          src={game.url} 
+          className="w-full h-full border-none shadow-2xl" 
+          title={game.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+
+      {/* Mobile Controls Overlay */}
+      <div className="sm:hidden p-6 bg-slate-950 border-t border-slate-900 flex justify-center items-center">
+        <div className="grid grid-cols-3 gap-3">
+          <div />
+          <button 
+            onMouseDown={() => simulateKey('w')}
+            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+          </button>
+          <div />
+          <button 
+            onMouseDown={() => simulateKey('a')}
+            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <button 
+            onMouseDown={() => simulateKey('s')}
+            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          <button 
+            onMouseDown={() => simulateKey('d')}
+            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Default initial data
 const INITIAL_GAMES: Game[] = [
+  {
+    id: 'tic-taq-toe',
+    title: 'Tic Taq Toe',
+    url: 'https://tic-taq-toe.vercel.app/',
+    description: 'The classic game of X\'s and O\'s. Strategy and fun for all ages.',
+    tags: ['Board', 'Strategy', 'Classic'],
+    createdAt: Date.now()
+  },
   {
     id: 'sudoku-game',
     title: 'Suduku Game',
     url: 'https://sudokusudoku.vercel.app/',
     description: 'Classic Sudoku puzzle game. Challenge your logic and fill the grid with numbers 1 to 9.',
     tags: ['Puzzle', 'Logic', 'Strategy'],
-    createdAt: Date.now()
+    createdAt: Date.now() - 500
   },
   {
     id: 'dig-game',
@@ -148,9 +276,9 @@ const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  // Incremented storage key to v10 to force reload of the non-AI game list
-  const STORAGE_KEY = 'noam_gold_games_gallery_v10';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v12';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -174,9 +302,9 @@ const App: React.FC = () => {
 
   const sortedGames = [...filteredGames].sort((a, b) => {
     if (sortOrder === 'desc') {
-      return b.createdAt - a.createdAt; // Newest first
+      return b.createdAt - a.createdAt;
     } else {
-      return a.createdAt - b.createdAt; // Oldest first
+      return a.createdAt - b.createdAt;
     }
   });
 
@@ -186,7 +314,7 @@ const App: React.FC = () => {
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
-        {/* Hero Section / Intro */}
+        {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">
             Your Ultimate <span className="text-primary">Web Game</span> Collection
@@ -200,7 +328,7 @@ const App: React.FC = () => {
             <input
               type="text"
               placeholder="Search games by title or tag..."
-              className="w-full bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-full px-6 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-12 backdrop-blur-sm"
+              className="w-full bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-full px-6 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-12 backdrop-blur-sm shadow-inner"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -210,7 +338,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Toolbar: Count & Sort */}
+        {/* Toolbar */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">
             Showing {sortedGames.length} game{sortedGames.length !== 1 ? 's' : ''}
@@ -233,7 +361,11 @@ const App: React.FC = () => {
         {sortedGames.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedGames.map(game => (
-              <GameCard key={game.id} game={game} />
+              <GameCard 
+                key={game.id} 
+                game={game} 
+                onPlay={(g) => setPlayingGame(g)} 
+              />
             ))}
           </div>
         ) : (
@@ -245,6 +377,14 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
+
+      {/* Game Overlay */}
+      {playingGame && (
+        <GameOverlay 
+          game={playingGame} 
+          onClose={() => setPlayingGame(null)} 
+        />
+      )}
     </div>
   );
 };

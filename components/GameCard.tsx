@@ -1,8 +1,10 @@
+
 import React, { useState, useMemo } from 'react';
 import { Game } from '../types';
 
 interface GameCardProps {
   game: Game;
+  onPlay: (game: Game) => void;
 }
 
 const TAG_STYLES = [
@@ -33,7 +35,7 @@ const getTagStyle = (tag: string) => {
   return TAG_STYLES[Math.abs(hash) % TAG_STYLES.length];
 };
 
-export const GameCard: React.FC<GameCardProps> = ({ game }) => {
+export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   
@@ -62,8 +64,9 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
     return (Date.now() - game.createdAt) < oneDay;
   }, [game.createdAt]);
 
-  const handlePlay = () => {
-    window.open(game.url, '_blank', 'noopener,noreferrer,width=1280,height=720');
+  const handlePlay = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onPlay(game);
   };
 
   const handleShareTwitter = (e: React.MouseEvent) => {

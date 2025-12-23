@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -17,15 +18,19 @@ interface ErrorBoundaryState {
 }
 
 /**
- * Fixed TS error: Properly handle props and state by using a constructor.
- * This ensures that property inheritance from React.Component is correctly 
- * recognized by the TypeScript compiler.
+ * ErrorBoundary to catch and handle frontend errors.
+ * Explicitly defining state and props to resolve TypeScript "does not exist" errors.
  */
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // Explicitly defining the constructor fixes "Property 'props' does not exist" errors
+  // Define state property to fix TS error: Property 'state' does not exist on type 'ErrorBoundary'
+  public override state: ErrorBoundaryState;
+  // Define props property to fix TS error: Property 'props' does not exist on type 'ErrorBoundary'
+  public override props: ErrorBoundaryProps;
+
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
+    this.props = props;
   }
 
   static getDerivedStateFromError(_: Error): ErrorBoundaryState {
@@ -37,7 +42,6 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   render() {
-    // Accessing this.state works with the constructor initialized state
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-4">
@@ -55,10 +59,18 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       );
     }
 
-    // Accessing this.props.children now works with explicit inheritance handling
     return this.props.children;
   }
 }
+
+// Set dynamic favicon for the arcade experience
+const setFavicon = () => {
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.href = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>';
+  document.head.appendChild(link);
+};
+setFavicon();
 
 // Check for stored theme preference or default to dark
 if (typeof document !== 'undefined') {
