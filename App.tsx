@@ -126,12 +126,20 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'rock-paper-scissors',
+    title: 'Rock Paper Scissors',
+    url: 'https://rockscissorsgame.vercel.app',
+    description: 'The ultimate hand game! Challenge the computer in this classic battle of wits. Choose your move and see who reigns supreme.',
+    tags: ['Classic', 'Casual', 'Strategy'],
+    createdAt: Date.now()
+  },
+  {
     id: 'the-great-heist',
     title: 'The Great Heist',
     url: 'https://the-great-heist.vercel.app/',
     description: 'Plan the perfect robbery in this intense strategy and action game. Can you escape with the loot?',
     tags: ['Strategy', 'Action', 'Stealth'],
-    createdAt: Date.now()
+    createdAt: Date.now() - 100
   },
   {
     id: 'tic-taq-toe',
@@ -285,7 +293,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v13';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v14';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
