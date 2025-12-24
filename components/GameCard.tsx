@@ -232,15 +232,33 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
+        <div className="flex justify-between items-start mb-2 relative group/title-tooltip">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2">
+            {game.title}
+          </h3>
+          {/* Detailed URL Tooltip on Title Hover */}
+          <div className="absolute bottom-full left-0 mb-3 px-3 py-2 bg-slate-900 dark:bg-slate-950 border border-slate-700 dark:border-slate-800 rounded-lg shadow-2xl opacity-0 group-hover/title-tooltip:opacity-100 transition-all duration-200 pointer-events-none z-50 transform translate-y-2 group-hover/title-tooltip:translate-y-0 max-w-[250px] break-all">
+            <div className="text-[10px] font-mono text-primary/90 mb-1 flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+              Direct URL:
+            </div>
+            <div className="text-[10px] text-slate-300 font-medium">
+              {game.url}
+            </div>
+            <div className="absolute -bottom-1.5 left-4 w-3 h-3 bg-slate-900 border-b border-r border-slate-700 transform rotate-45"></div>
+          </div>
         </div>
         
         {/* Description */}
-        <div className="relative mb-4 flex-grow">
+        <div className="relative mb-4 flex-grow group/desc-tooltip">
           <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden transition-colors">
             {game.description}
           </p>
+          {/* Detailed Description Tooltip on Description Hover */}
+          <div className="absolute bottom-full left-0 mb-2 px-3 py-2 bg-slate-900/95 dark:bg-slate-950/98 backdrop-blur-md border border-slate-700 dark:border-slate-800 rounded-lg shadow-2xl opacity-0 group-hover/desc-tooltip:opacity-100 transition-all duration-200 pointer-events-none z-50 transform translate-y-2 group-hover/desc-tooltip:translate-y-0 w-full text-xs leading-relaxed text-slate-200">
+            {game.description}
+            <div className="absolute -bottom-1 left-4 w-2 h-2 bg-slate-900 border-b border-r border-slate-700 transform rotate-45"></div>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
@@ -267,7 +285,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
                <div className="relative group/tooltip">
                  <button 
                    onClick={handleShareTwitter} 
-                   className="text-slate-400 hover:text-[#1DA1F2] transition-all duration-200 transform hover:scale-125 p-1"
+                   className="text-slate-500 dark:text-slate-300 hover:text-[#1DA1F2] transition-all duration-200 transform hover:scale-125 p-1"
                  >
                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
                  </button>
@@ -279,7 +297,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
                <div className="relative group/tooltip">
                  <button 
                    onClick={handleShareFacebook} 
-                   className="text-slate-400 hover:text-[#4267B2] transition-all duration-200 transform hover:scale-125 p-1"
+                   className="text-slate-500 dark:text-slate-300 hover:text-[#4267B2] transition-all duration-200 transform hover:scale-125 p-1"
                  >
                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                  </button>
@@ -292,7 +310,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
                  <div className="relative group/tooltip">
                    <button 
                      onClick={handleNativeShare} 
-                     className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-all duration-200 transform hover:scale-125 p-1"
+                     className="text-slate-500 dark:text-slate-300 hover:text-slate-600 dark:hover:text-white transition-all duration-200 transform hover:scale-125 p-1"
                    >
                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                    </button>
@@ -308,7 +326,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
                    className={`relative overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
                      copied 
                        ? 'bg-emerald-500 text-white w-20 px-2 py-1 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] scale-105' 
-                       : 'text-slate-400 hover:text-primary p-1 hover:scale-125 w-7'
+                       : 'text-slate-500 dark:text-slate-300 hover:text-primary p-1 hover:scale-125 w-7'
                    }`}
                  >
                    {copied ? (
