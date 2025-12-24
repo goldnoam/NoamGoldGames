@@ -293,7 +293,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v14';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v16';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);

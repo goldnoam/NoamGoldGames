@@ -10,10 +10,10 @@ export const Footer: React.FC = () => {
         <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-500">
           <span>Send Feedback:</span>
           <a 
-            href="mailto:gold.noam@gmail.com" 
+            href="mailto:goldnoamai@gmail.com" 
             className="text-primary hover:text-secondary transition-colors duration-300 underline underline-offset-4"
           >
-            gold.noam@gmail.com
+            goldnoamai@gmail.com
           </a>
         </div>
       </div>
