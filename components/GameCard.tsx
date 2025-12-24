@@ -37,6 +37,7 @@ const getTagStyle = (tag: string) => {
 export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   
   // Generate a random stable number of viewers between 100 and 5000
   const viewers = useMemo(() => {
@@ -109,13 +110,15 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
     }
   };
 
-  const liveThumbnail = game.thumbnailUrl || `https://image.thum.io/get/width/600/crop/800/noanimate/${game.url}`;
+  const liveThumbnail = game.thumbnailUrl || `https://image.thum.io/get/width/1200/crop/800/noanimate/${game.url}`;
   const canShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   return (
     <div 
       className="group relative bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-[0_0_30px_rgba(99,102,241,0.35)] dark:hover:shadow-[0_0_40px_rgba(168,85,247,0.25)] hover:border-primary/60 dark:hover:border-primary/40 hover:ring-2 hover:ring-primary/20 dark:hover:ring-secondary/20 hover:-translate-y-2 hover:z-30 transition-all duration-300 flex flex-col h-full cursor-pointer"
       onClick={handlePlay}
+      onMouseEnter={() => setShowPreview(true)}
+      onMouseLeave={() => setShowPreview(false)}
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden rounded-t-xl bg-slate-200 dark:bg-slate-900">
@@ -162,12 +165,54 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
            </span>
         </div>
 
-        {/* Thumbnail Info Overlay (Small Tooltip) */}
-        {!isLoading && (
-          <div className="absolute top-0 inset-x-0 p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none transform -translate-y-2 group-hover:translate-y-0">
-            <div className="bg-slate-900/95 dark:bg-black/90 backdrop-blur-md border border-slate-700/50 p-3 rounded-lg shadow-2xl">
-              <h4 className="font-bold text-white text-sm mb-1 line-clamp-1">{game.title}</h4>
-              <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{game.description}</p>
+        {/* --- DETAILED PREVIEW POPUP --- */}
+        {!isLoading && showPreview && (
+          <div className="absolute inset-x-0 bottom-0 top-0 z-50 pointer-events-none transition-all duration-300 ease-out animate-fade-in origin-bottom">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[110%] md:w-[130%] bg-slate-900/95 dark:bg-slate-950/98 backdrop-blur-xl border-2 border-primary/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden">
+               {/* Larger Live Image in Preview */}
+               <div className="relative h-48 md:h-56 overflow-hidden border-b border-white/10">
+                  <img 
+                    src={liveThumbnail} 
+                    alt={`${game.title} Preview`}
+                    className="w-full h-full object-cover animate-pulse-slow"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                    <span className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded flex items-center gap-1 uppercase tracking-tighter shadow-lg">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping" />
+                      Live Preview
+                    </span>
+                  </div>
+               </div>
+               
+               {/* Metadata in Preview */}
+               <div className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="text-xl font-black text-white leading-tight pr-4">{game.title}</h4>
+                    <div className="text-primary font-bold text-xs bg-primary/10 px-2 py-1 rounded">Arcade v1.0</div>
+                  </div>
+                  <p className="text-sm text-slate-300 leading-relaxed mb-4 line-clamp-4">
+                    {game.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {game.tags.slice(0, 3).map(tag => (
+                      <span key={tag} className="text-[10px] font-bold text-slate-400 border border-slate-700 px-2 py-0.5 rounded-md uppercase tracking-widest">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                     <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        {viewers.toLocaleString()} active
+                     </div>
+                     <div className="text-primary font-black text-[10px] uppercase animate-pulse">
+                        Click card to launch
+                     </div>
+                  </div>
+               </div>
+               {/* Arrow */}
+               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-900 border-b border-r border-primary/30 transform rotate-45"></div>
             </div>
           </div>
         )}
@@ -191,26 +236,11 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
           <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-2" title={game.url}>{game.title}</h3>
         </div>
         
-        {/* Description with Full Tooltip */}
-        <div className="relative group/desc-tooltip mb-4 flex-grow">
-          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden cursor-help group-hover/desc-tooltip:text-slate-900 dark:group-hover/desc-tooltip:text-slate-100 transition-colors">
+        {/* Description */}
+        <div className="relative mb-4 flex-grow">
+          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 overflow-hidden transition-colors">
             {game.description}
           </p>
-          
-          {/* Detailed Tooltip Popup */}
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 md:w-72 lg:w-80 opacity-0 group-hover/desc-tooltip:opacity-100 transition-all duration-300 pointer-events-none z-[60] transform translate-y-4 group-hover/desc-tooltip:translate-y-0 scale-95 group-hover/desc-tooltip:scale-100">
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-slate-700 relative">
-              <div className="text-xs font-bold text-primary dark:text-secondary uppercase tracking-widest mb-2 flex items-center gap-2">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                Game Details
-              </div>
-              <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
-                {game.description}
-              </p>
-              {/* Tooltip arrow */}
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 transform rotate-45"></div>
-            </div>
-          </div>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
