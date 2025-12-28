@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
@@ -20,7 +20,7 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
     if (iframeRef.current?.contentWindow) {
       // Note: This only works if the target game is configured to listen to postMessages
       // or if it's on the same origin. For external games, we provide the UI.
-      iframeRef.current.window.postMessage({ type: 'keydown', key }, '*');
+      iframeRef.current.contentWindow.postMessage({ type: 'keydown', key }, '*');
     }
   };
 
@@ -125,6 +125,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 
 // Default initial data
 const INITIAL_GAMES: Game[] = [
+  {
+    id: 'middle-east-hegemony',
+    title: 'Middle East Hegemony',
+    url: 'https://middle-east-hegemony.vercel.app/',
+    description: 'Lead your nation to regional dominance in this deep geopolitical strategy simulator. Balance diplomacy, resource management, and military strategy to shape the future of the Middle East.',
+    tags: ['Strategy', 'Simulation', 'Geopolitics'],
+    createdAt: Date.now() + 100
+  },
   {
     id: 'battleships-game',
     title: 'BattleShips',
@@ -315,9 +323,10 @@ const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v18';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v20';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -334,10 +343,22 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const filteredGames = games.filter(game => 
-    game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // Fix: Added useMemo via corrected imports to resolve "Cannot find name 'useMemo'" error.
+  // Compute unique categories from available games
+  const allCategories = useMemo(() => {
+    const categories = new Set<string>();
+    games.forEach(game => game.tags.forEach(tag => categories.add(tag)));
+    return ['All', ...Array.from(categories).sort()];
+  }, [games]);
+
+  const filteredGames = games.filter(game => {
+    const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesCategory = selectedCategory === 'All' || game.tags.includes(selectedCategory);
+    
+    return matchesSearch && matchesCategory;
+  });
 
   const sortedGames = [...filteredGames].sort((a, b) => {
     if (sortOrder === 'desc') {
@@ -363,11 +384,11 @@ const App: React.FC = () => {
           </p>
         </div>
 
-        {/* Toolbar: Search & Sort Bar directly above the grid */}
-        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col md:flex-row items-center gap-4 sticky top-24 z-30">
+        {/* Toolbar: Search, Filter & Sort Bar directly above the grid */}
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
           
           {/* Search Input */}
-          <div className="relative flex-grow w-full md:w-auto">
+          <div className="relative flex-grow w-full xl:w-auto">
             <input
               type="text"
               placeholder="Search games by title or tag..."
@@ -391,22 +412,40 @@ const App: React.FC = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-            <p className="text-slate-600 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
+          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-between xl:justify-end">
+            <p className="hidden md:block text-slate-600 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
               {sortedGames.length} Result{sortedGames.length !== 1 ? 's' : ''}
             </p>
             
-            <div className="flex items-center gap-2">
-              <label htmlFor="sortOrder" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter">Sort:</label>
-              <select
-                id="sortOrder"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-                className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
-              >
-                <option value="desc">Newest First</option>
-                <option value="asc">Oldest First</option>
-              </select>
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              {/* Category Filter */}
+              <div className="flex items-center gap-2 flex-grow sm:flex-grow-0">
+                <label htmlFor="categoryFilter" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter whitespace-nowrap">Category:</label>
+                <select
+                  id="categoryFilter"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
+                >
+                  {allCategories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sort Order */}
+              <div className="flex items-center gap-2 flex-grow sm:flex-grow-0">
+                <label htmlFor="sortOrder" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter whitespace-nowrap">Sort:</label>
+                <select
+                  id="sortOrder"
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
+                  className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
+                >
+                  <option value="desc">Newest First</option>
+                  <option value="asc">Oldest First</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -430,12 +469,15 @@ const App: React.FC = () => {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No games found</h3>
-            <p className="text-slate-500 dark:text-slate-500 mb-6">We couldn't find anything matching "{searchQuery}"</p>
+            <p className="text-slate-500 dark:text-slate-500 mb-6">We couldn't find anything matching your filters.</p>
             <button 
-              onClick={() => setSearchQuery('')}
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('All');
+              }}
               className="text-primary hover:text-secondary font-bold underline transition-colors"
             >
-              Clear search and try again
+              Reset all filters
             </button>
           </div>
         )}
