@@ -20,7 +20,7 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
     if (iframeRef.current?.contentWindow) {
       // Note: This only works if the target game is configured to listen to postMessages
       // or if it's on the same origin. For external games, we provide the UI.
-      iframeRef.current.contentWindow.postMessage({ type: 'keydown', key }, '*');
+      iframeRef.current.window.postMessage({ type: 'keydown', key }, '*');
     }
   };
 
@@ -126,12 +126,28 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'battleships-game',
+    title: 'BattleShips',
+    url: 'https://battleships1.vercel.app/',
+    description: 'Command your fleet and sink the enemy. A classic strategy game of maritime warfare. Deploy your ships wisely and dominate the seas!',
+    tags: ['Strategy', 'Board', 'Classic'],
+    createdAt: Date.now()
+  },
+  {
+    id: 'godzilla-escape',
+    title: 'Godzilla Escape',
+    url: 'https://godzilla-escape.vercel.app',
+    description: 'The city is under siege by the King of Monsters! Race through the crumbling streets, avoid debris, and survive the ultimate escape challenge.',
+    tags: ['Action', 'Adventure', 'Arcade'],
+    createdAt: Date.now() - 25
+  },
+  {
     id: 'steel-drop',
     title: 'Steel Drop',
     url: 'https://steel-drop.vercel.app',
     description: 'Precision and speed are your only allies. Navigate the falling steel and survive the industrial chaos in this fast-paced arcade challenge.',
     tags: ['Arcade', 'Action', 'Reflexes'],
-    createdAt: Date.now()
+    createdAt: Date.now() - 50
   },
   {
     id: 'rock-paper-scissors',
@@ -139,7 +155,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://rockscissorsgame.vercel.app',
     description: 'The ultimate hand game! Challenge the computer in this classic battle of wits. Choose your move and see who reigns supreme.',
     tags: ['Classic', 'Casual', 'Strategy'],
-    createdAt: Date.now() - 50
+    createdAt: Date.now() - 100
   },
   {
     id: 'the-great-heist',
@@ -147,7 +163,7 @@ const INITIAL_GAMES: Game[] = [
     url: 'https://the-great-heist.vercel.app/',
     description: 'Plan the perfect robbery in this intense strategy and action game. Can you escape with the loot?',
     tags: ['Strategy', 'Action', 'Stealth'],
-    createdAt: Date.now() - 100
+    createdAt: Date.now() - 150
   },
   {
     id: 'tic-taq-toe',
@@ -301,7 +317,7 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v17';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v18';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
