@@ -126,6 +126,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'rescue-babies-stork',
+    title: 'Rescue Babies fall from stork',
+    url: 'https://stork-operation-game.vercel.app/',
+    description: 'A fast-paced rescue mission! Catch the falling babies dropped by the confused storks in this high-stakes arcade challenge. Precision and timing are everything.',
+    tags: ['Action', 'Arcade', 'Casual'],
+    createdAt: Date.now() + 400
+  },
+  {
     id: 'fire-rescue-game',
     title: 'Fire Rescue Game',
     url: 'https://fire-rescue-pro.vercel.app/',
@@ -342,7 +350,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v22';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v23';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
