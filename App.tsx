@@ -126,6 +126,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'cat-bins-peek',
+    title: 'Cat bins peek',
+    url: 'https://cat-bin-peek.vercel.app/',
+    description: 'A delightful game of hide and seek! Help the curious cat peek out of the bins at the right moment. Fast-paced, adorable, and purely addictive.',
+    tags: ['Casual', 'Arcade', 'Cute'],
+    createdAt: Date.now() + 200
+  },
+  {
     id: 'middle-east-hegemony',
     title: 'Middle East Hegemony',
     url: 'https://middle-east-hegemony.vercel.app/',
@@ -326,7 +334,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v20';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v21';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -343,7 +351,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Fix: Added useMemo via corrected imports to resolve "Cannot find name 'useMemo'" error.
   // Compute unique categories from available games
   const allCategories = useMemo(() => {
     const categories = new Set<string>();
@@ -370,7 +377,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/30 transition-colors duration-300">
-      <Header />
+      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
@@ -387,7 +394,7 @@ const App: React.FC = () => {
         {/* Toolbar: Search, Filter & Sort Bar directly above the grid */}
         <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
           
-          {/* Search Input */}
+          {/* Main Content Search Input (Synced with Header) */}
           <div className="relative flex-grow w-full xl:w-auto">
             <input
               type="text"
