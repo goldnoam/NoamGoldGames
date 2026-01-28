@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
 import { Game } from './types';
+import { generateGameMetadata } from './services/geminiService';
 
 // Game Overlay Component for in-app play with controls
 const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onClose }) => {
@@ -11,22 +12,18 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 
   const handleReset = () => {
     if (iframeRef.current) {
-      // Logic to reload the game
       iframeRef.current.src = iframeRef.current.src;
     }
   };
 
   const simulateKey = (key: string) => {
     if (iframeRef.current?.contentWindow) {
-      // Note: This only works if the target game is configured to listen to postMessages
-      // or if it's on the same origin. For external games, we provide the UI.
       iframeRef.current.contentWindow.postMessage({ type: 'keydown', key }, '*');
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col animate-fade-in">
-      {/* Game Bar */}
       <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-4">
           <button 
@@ -60,7 +57,6 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
         </div>
       </div>
 
-      {/* Main Viewport */}
       <div className="relative flex-grow bg-black overflow-hidden flex items-center justify-center">
         {isPaused && (
           <div className="absolute inset-0 z-20 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center">
@@ -88,33 +84,20 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
         />
       </div>
 
-      {/* Mobile Controls Overlay */}
       <div className="sm:hidden p-6 bg-slate-950 border-t border-slate-900 flex justify-center items-center">
         <div className="grid grid-cols-3 gap-3">
           <div />
-          <button 
-            onMouseDown={() => simulateKey('w')}
-            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
-          >
+          <button onMouseDown={() => simulateKey('w')} className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
           </button>
           <div />
-          <button 
-            onMouseDown={() => simulateKey('a')}
-            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
-          >
+          <button onMouseDown={() => simulateKey('a')} className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <button 
-            onMouseDown={() => simulateKey('s')}
-            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
-          >
+          <button onMouseDown={() => simulateKey('s')} className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
           </button>
-          <button 
-            onMouseDown={() => simulateKey('d')}
-            className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all"
-          >
+          <button onMouseDown={() => simulateKey('d')} className="w-14 h-14 bg-slate-800 active:bg-primary rounded-xl flex items-center justify-center text-white shadow-lg border border-slate-700 active:scale-95 transition-all">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
@@ -125,6 +108,22 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 
 // Default initial data
 const INITIAL_GAMES: Game[] = [
+  {
+    id: 'bingo-game',
+    title: 'Bingo Game',
+    url: 'https://bingo12.vercel.app/',
+    description: 'A fun and classic bingo experience. Play with multiple cards, track your numbers, and aim for that winning pattern in this digital version of the timeless social game.',
+    tags: ['Classic', 'Casual', 'Board'],
+    createdAt: Date.now() + 600
+  },
+  {
+    id: 'find-treasure',
+    title: 'Find Treasure',
+    url: 'https://treaseuregame.vercel.app/',
+    description: 'Embark on an epic quest for riches! Search through mysterious islands and ancient ruins to discover long-lost treasures in this exciting adventure game.',
+    tags: ['Adventure', 'Puzzle', 'Casual'],
+    createdAt: Date.now() + 500
+  },
   {
     id: 'rescue-babies-stork',
     title: 'Rescue Babies fall from stork',
@@ -161,185 +160,9 @@ const INITIAL_GAMES: Game[] = [
     id: 'battleships-game',
     title: 'BattleShips',
     url: 'https://battleships1.vercel.app/',
-    description: 'Command your fleet and sink the enemy. A classic strategy game of maritime warfare. Deploy your ships wisely and dominate the seas!',
+    description: 'Command your fleet and sink the enemy. A classic strategy game of maritime warfare.',
     tags: ['Strategy', 'Board', 'Classic'],
     createdAt: Date.now()
-  },
-  {
-    id: 'godzilla-escape',
-    title: 'Godzilla Escape',
-    url: 'https://godzilla-escape.vercel.app',
-    description: 'The city is under siege by the King of Monsters! Race through the crumbling streets, avoid debris, and survive the ultimate escape challenge.',
-    tags: ['Action', 'Adventure', 'Arcade'],
-    createdAt: Date.now() - 25
-  },
-  {
-    id: 'steel-drop',
-    title: 'Steel Drop',
-    url: 'https://steel-drop.vercel.app',
-    description: 'Precision and speed are your only allies. Navigate the falling steel and survive the industrial chaos in this fast-paced arcade challenge.',
-    tags: ['Arcade', 'Action', 'Reflexes'],
-    createdAt: Date.now() - 50
-  },
-  {
-    id: 'rock-paper-scissors',
-    title: 'Rock Paper Scissors',
-    url: 'https://rockscissorsgame.vercel.app',
-    description: 'The ultimate hand game! Challenge the computer in this classic battle of wits. Choose your move and see who reigns supreme.',
-    tags: ['Classic', 'Casual', 'Strategy'],
-    createdAt: Date.now() - 100
-  },
-  {
-    id: 'the-great-heist',
-    title: 'The Great Heist',
-    url: 'https://the-great-heist.vercel.app/',
-    description: 'Plan the perfect robbery in this intense strategy and action game. Can you escape with the loot?',
-    tags: ['Strategy', 'Action', 'Stealth'],
-    createdAt: Date.now() - 150
-  },
-  {
-    id: 'tic-taq-toe',
-    title: 'Tic Taq Toe',
-    url: 'https://tic-taq-toe.vercel.app/',
-    description: 'The classic game of X\'s and O\'s. Strategy and fun for all ages.',
-    tags: ['Board', 'Strategy', 'Classic'],
-    createdAt: Date.now() - 250
-  },
-  {
-    id: 'sudoku-game',
-    title: 'Suduku Game',
-    url: 'https://sudokusudoku.vercel.app/',
-    description: 'Classic Sudoku puzzle game. Challenge your logic and fill the grid with numbers 1 to 9.',
-    tags: ['Puzzle', 'Logic', 'Strategy'],
-    createdAt: Date.now() - 500
-  },
-  {
-    id: 'dig-game',
-    title: 'Dig Game',
-    url: 'https://diggame.vercel.app',
-    description: 'Exciting digging adventure. Uncover hidden treasures beneath the surface.',
-    tags: ['Adventure', 'Action', 'Arcade'],
-    createdAt: Date.now() - 1000
-  },
-  {
-    id: 'astro-game',
-    title: 'Astro Game',
-    url: 'https://astrogame.vercel.app/',
-    description: 'Navigate the cosmos and survive the dangers of deep space.',
-    tags: ['Space', 'Sci-Fi', 'Action'],
-    createdAt: Date.now() - 3000
-  },
-  {
-    id: 'chips-game',
-    title: 'Chips Game',
-    url: 'https://chipsgame.vercel.app/',
-    description: 'A strategic puzzle game. Stack, bet, and win with chips.',
-    tags: ['Puzzle', 'Strategy', 'Board'],
-    createdAt: Date.now() - 4000
-  },
-  {
-    id: 'charity-game',
-    title: 'Charity Game',
-    url: 'https://charitygame.vercel.app/',
-    description: 'Make a difference in the world through this philanthropic simulation.',
-    tags: ['Simulation', 'Social', 'Educational'],
-    createdAt: Date.now() - 5000
-  },
-  {
-    id: 'ski-game',
-    title: 'Ski Game',
-    url: 'https://skigame.vercel.app/',
-    description: 'Hit the slopes! Dodge obstacles and race to the finish line.',
-    tags: ['Sports', 'Winter', 'Action'],
-    createdAt: Date.now() - 6000
-  },
-  {
-    id: 'zombie-survival',
-    title: 'Zombie Survival',
-    url: 'https://zombie.vercel.app/',
-    description: 'Fight for survival against hordes of zombies in this intense game.',
-    tags: ['Horror', 'Survival', 'Action'],
-    createdAt: Date.now() - 7000
-  },
-  {
-    id: 'pizza-ng',
-    title: 'Pizza NG',
-    url: 'https://pizzang.vercel.app/',
-    description: 'Become a master chef and bake the most delicious pizzas.',
-    tags: ['Cooking', 'Simulation', 'Fun'],
-    createdAt: Date.now() - 8000
-  },
-  {
-    id: 'chemistry-game',
-    title: 'Chemistry Game',
-    url: 'https://chemistrygame.vercel.app/',
-    description: 'Explore chemical reactions and elements in a safe virtual lab.',
-    tags: ['Science', 'Educational', 'Puzzle'],
-    createdAt: Date.now() - 9000
-  },
-  {
-    id: 'shoe-laces',
-    title: 'Shoe Laces',
-    url: 'https://shoe-laces.vercel.app/',
-    description: 'Master the art of tying shoe laces with various techniques.',
-    tags: ['Educational', 'Life Skills', 'Casual'],
-    createdAt: Date.now() - 10000
-  },
-  {
-    id: 'make-burger',
-    title: 'Make Burger',
-    url: 'https://makeburger.vercel.app',
-    description: 'Stack ingredients and serve the perfect burger before time runs out.',
-    tags: ['Cooking', 'Time Management', 'Arcade'],
-    createdAt: Date.now() - 11000
-  },
-  {
-    id: 'hotdog-game',
-    title: 'Hotdog Game',
-    url: 'https://hotdog-game.vercel.app/',
-    description: 'A fun and fast-paced game centered around everyone\'s favorite snack.',
-    tags: ['Arcade', 'Food', 'Casual'],
-    createdAt: Date.now() - 12000
-  },
-  {
-    id: 'fisherman-game',
-    title: 'Fisherman Game',
-    url: 'https://fishermangame.vercel.app/',
-    description: 'Cast your line, hook the biggest catch, and master the art of fishing.',
-    tags: ['Fishing', 'Simulation', 'Relaxing'],
-    createdAt: Date.now() - 13000
-  },
-  {
-    id: 'turbo-delivery',
-    title: 'Turbo Delivery',
-    url: 'https://turbogame.vercel.app/',
-    description: 'Race against time to deliver packages in this high-speed arcade game.',
-    tags: ['Arcade', 'Racing', 'Action'],
-    createdAt: Date.now() - 14000
-  },
-  {
-    id: 'hexa-memory',
-    title: 'HexaMemory',
-    url: 'https://hexa-memory.vercel.app',
-    description: 'Challenge your memory skills by matching pairs in this hexagonal puzzle game.',
-    tags: ['Puzzle', 'Memory', 'Strategy'],
-    createdAt: Date.now() - 15000
-  },
-  {
-    id: 'eggs-factory',
-    title: 'Eggs Factory',
-    url: 'https://eggs-factory-game.vercel.app',
-    description: 'Build and manage your own egg production empire in this fun factory simulation.',
-    tags: ['Simulation', 'Management', 'Tycoon'],
-    createdAt: Date.now() - 16000
-  },
-  {
-    id: 'city-guards',
-    title: 'City Guards Game',
-    url: 'https://city-guard-game.vercel.app/',
-    description: 'Protect the city from relentless attacks in this exciting strategy defense game.',
-    tags: ['Strategy', 'Defense', 'Action'],
-    createdAt: Date.now() - 17000
   }
 ];
 
@@ -349,8 +172,12 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
+  const [isAddingGame, setIsAddingGame] = useState(false);
+  const [newGameUrl, setNewGameUrl] = useState('');
+  const [newGameTitle, setNewGameTitle] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v23';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v25';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -358,7 +185,6 @@ const App: React.FC = () => {
       try {
         setGames(JSON.parse(savedGames));
       } catch (e) {
-        console.error("Failed to parse saved games", e);
         setGames(INITIAL_GAMES);
       }
     } else {
@@ -367,7 +193,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Compute unique categories from available games
   const allCategories = useMemo(() => {
     const categories = new Set<string>();
     games.forEach(game => game.tags.forEach(tag => categories.add(tag)));
@@ -377,27 +202,43 @@ const App: React.FC = () => {
   const filteredGames = games.filter(game => {
     const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
     const matchesCategory = selectedCategory === 'All' || game.tags.includes(selectedCategory);
-    
     return matchesSearch && matchesCategory;
   });
 
-  const sortedGames = [...filteredGames].sort((a, b) => {
-    if (sortOrder === 'desc') {
-      return b.createdAt - a.createdAt;
-    } else {
-      return a.createdAt - b.createdAt;
-    }
-  });
+  const sortedGames = [...filteredGames].sort((a, b) => sortOrder === 'desc' ? b.createdAt - a.createdAt : a.createdAt - b.createdAt);
+
+  const handleAddGameSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGameUrl || !newGameTitle) return;
+
+    setIsGenerating(true);
+    const metadata = await generateGameMetadata(newGameTitle, newGameUrl);
+    
+    const newGame: Game = {
+      id: `game-${Date.now()}`,
+      title: newGameTitle,
+      url: newGameUrl,
+      description: metadata?.description || "A new game added to the gallery.",
+      tags: metadata?.tags || ["Casual"],
+      createdAt: Date.now(),
+    };
+
+    const updatedGames = [newGame, ...games];
+    setGames(updatedGames);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedGames));
+    
+    setNewGameUrl('');
+    setNewGameTitle('');
+    setIsAddingGame(false);
+    setIsGenerating(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/30 transition-colors duration-300">
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        
-        {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">
             Your Ultimate <span className="text-primary">Web Game</span> Collection
@@ -407,115 +248,120 @@ const App: React.FC = () => {
           </p>
         </div>
 
-        {/* Toolbar: Search, Filter & Sort Bar directly above the grid */}
         <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
-          
-          {/* Main Content Search Input (Synced with Header) */}
           <div className="relative flex-grow w-full xl:w-auto">
             <input
               type="text"
-              placeholder="Search games by title or tag..."
-              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pl-11 pr-10 shadow-inner"
+              placeholder="Search games..."
+              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all pl-11 shadow-inner"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <svg className="absolute left-3.5 top-3 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-2.5 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 transition-colors"
-                title="Clear search"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-between xl:justify-end">
-            <p className="hidden md:block text-slate-600 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
-              {sortedGames.length} Result{sortedGames.length !== 1 ? 's' : ''}
-            </p>
-            
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              {/* Category Filter */}
-              <div className="flex items-center gap-2 flex-grow sm:flex-grow-0">
-                <label htmlFor="categoryFilter" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter whitespace-nowrap">Category:</label>
-                <select
-                  id="categoryFilter"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
-                >
-                  {allCategories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
+          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-end">
+            <button 
+              onClick={() => setIsAddingGame(true)}
+              className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+              Add Game
+            </button>
 
-              {/* Sort Order */}
-              <div className="flex items-center gap-2 flex-grow sm:flex-grow-0">
-                <label htmlFor="sortOrder" className="text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-tighter whitespace-nowrap">Sort:</label>
-                <select
-                  id="sortOrder"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-                  className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium shadow-sm"
-                >
-                  <option value="desc">Newest First</option>
-                  <option value="asc">Oldest First</option>
-                </select>
-              </div>
+            <div className="flex items-center gap-4">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="bg-slate-100 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 outline-none font-medium shadow-sm"
+              >
+                {allCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </select>
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
+                className="bg-slate-100 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 outline-none font-medium shadow-sm"
+              >
+                <option value="desc">Newest First</option>
+                <option value="asc">Oldest First</option>
+              </select>
             </div>
           </div>
         </div>
 
-        {/* Gallery Grid */}
         {sortedGames.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedGames.map(game => (
-              <GameCard 
-                key={game.id} 
-                game={game} 
-                onPlay={(g) => setPlayingGame(g)} 
-              />
-            ))}
+            {sortedGames.map(game => <GameCard key={game.id} game={game} onPlay={setPlayingGame} />)}
           </div>
         ) : (
           <div className="text-center py-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/30">
-            <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-slate-400 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No games found</h3>
-            <p className="text-slate-500 dark:text-slate-500 mb-6">We couldn't find anything matching your filters.</p>
-            <button 
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('All');
-              }}
-              className="text-primary hover:text-secondary font-bold underline transition-colors"
-            >
-              Reset all filters
-            </button>
+            <button onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }} className="text-primary font-bold underline">Reset all filters</button>
           </div>
         )}
-
       </main>
 
-      <Footer />
-
-      {/* Game Overlay */}
-      {playingGame && (
-        <GameOverlay 
-          game={playingGame} 
-          onClose={() => setPlayingGame(null)} 
-        />
+      {/* Add Game Modal */}
+      {isAddingGame && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-card border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Add New Game</h3>
+                <button onClick={() => setIsAddingGame(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <form onSubmit={handleAddGameSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Game Title</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="e.g. Find Treasure"
+                    className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                    value={newGameTitle}
+                    onChange={(e) => setNewGameTitle(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Game URL</label>
+                  <input
+                    required
+                    type="url"
+                    placeholder="https://example.com"
+                    className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                    value={newGameUrl}
+                    onChange={(e) => setNewGameUrl(e.target.value)}
+                  />
+                </div>
+                <div className="pt-4">
+                  <button
+                    disabled={isGenerating}
+                    type="submit"
+                    className="w-full bg-primary hover:bg-secondary disabled:bg-slate-400 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        AI Generating Metadata...
+                      </>
+                    ) : 'Add to Gallery'}
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
+               <p className="text-[10px] text-slate-500 text-center italic">AI will automatically analyze your game to generate descriptions and tags.</p>
+            </div>
+          </div>
+        </div>
       )}
+
+      <Footer />
+      {playingGame && <GameOverlay game={playingGame} onClose={() => setPlayingGame(null)} />}
     </div>
   );
 };
