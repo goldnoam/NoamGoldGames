@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
+import { AdBanner } from './components/AdBanner';
 import { Game } from './types';
 import { generateGameMetadata } from './services/geminiService';
 
@@ -239,7 +240,7 @@ const App: React.FC = () => {
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">
             Your Ultimate <span className="text-primary">Web Game</span> Collection
           </h2>
@@ -247,6 +248,9 @@ const App: React.FC = () => {
             Curate, play, and share your favorite browser-based games in one stunning, streamlined gallery.
           </p>
         </div>
+
+        {/* TOP AD PLACEMENT */}
+        <AdBanner slot="TOP_BANNER_SLOT_ID" className="mb-12" />
 
         <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
           <div className="relative flex-grow w-full xl:w-auto">
@@ -293,7 +297,17 @@ const App: React.FC = () => {
 
         {sortedGames.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedGames.map(game => <GameCard key={game.id} game={game} onPlay={setPlayingGame} />)}
+            {sortedGames.map((game, index) => (
+              <React.Fragment key={game.id}>
+                <GameCard game={game} onPlay={setPlayingGame} />
+                {/* IN-FEED AD PLACEMENT: Every 6 items */}
+                {(index + 1) % 6 === 0 && (
+                  <div className="sm:col-span-2 lg:col-span-3">
+                    <AdBanner slot={`IN_FEED_SLOT_${index}`} format="fluid" layoutKey="-fb+5w+4e-db+86" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
           </div>
         ) : (
           <div className="text-center py-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/30">
@@ -301,6 +315,9 @@ const App: React.FC = () => {
             <button onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }} className="text-primary font-bold underline">Reset all filters</button>
           </div>
         )}
+
+        {/* BOTTOM AD PLACEMENT */}
+        <AdBanner slot="BOTTOM_BANNER_SLOT_ID" className="mt-16" />
       </main>
 
       {/* Add Game Modal */}
