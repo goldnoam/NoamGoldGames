@@ -110,6 +110,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'super-fan-simulator',
+    title: 'Super Fan Simulator',
+    url: 'https://fan1.vercel.app/',
+    description: 'Channel your inner enthusiast! Experience the extreme energy and dedication of being a true super fan in this unique and hilarious simulation game.',
+    tags: ['Simulation', 'Casual', 'Funny'],
+    createdAt: Date.now() + 700
+  },
+  {
     id: 'bingo-game',
     title: 'Bingo Game',
     url: 'https://bingo12.vercel.app/',
@@ -178,7 +186,7 @@ const App: React.FC = () => {
   const [newGameTitle, setNewGameTitle] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v25';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v26';
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
