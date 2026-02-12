@@ -110,6 +110,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'bat-shooter',
+    title: 'Bat Shooter',
+    url: 'https://bar-shooter.vercel.app/',
+    description: 'Take aim and clear the skies! Test your reflexes in this fast-paced arcade shooter where you must defend against swarms of nocturnal pests.',
+    tags: ['Action', 'Arcade', 'Shooter'],
+    createdAt: Date.now() + 800
+  },
+  {
     id: 'super-fan-simulator',
     title: 'Super Fan Simulator',
     url: 'https://fan1.vercel.app/',
@@ -178,6 +186,7 @@ const INITIAL_GAMES: Game[] = [
 const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
@@ -186,7 +195,16 @@ const App: React.FC = () => {
   const [newGameTitle, setNewGameTitle] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v26';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v27';
+
+  // Debounce mechanism for search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   useEffect(() => {
     const savedGames = localStorage.getItem(STORAGE_KEY);
@@ -208,14 +226,21 @@ const App: React.FC = () => {
     return ['All', ...Array.from(categories).sort()];
   }, [games]);
 
-  const filteredGames = games.filter(game => {
-    const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      game.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = selectedCategory === 'All' || game.tags.includes(selectedCategory);
-    return matchesSearch && matchesCategory;
-  });
+  const filteredGames = useMemo(() => {
+    return games.filter(game => {
+      const query = debouncedSearchQuery.toLowerCase();
+      const matchesSearch = game.title.toLowerCase().includes(query) ||
+        game.tags.some(tag => tag.toLowerCase().includes(query));
+      const matchesCategory = selectedCategory === 'All' || game.tags.includes(selectedCategory);
+      return matchesSearch && matchesCategory;
+    });
+  }, [games, debouncedSearchQuery, selectedCategory]);
 
-  const sortedGames = [...filteredGames].sort((a, b) => sortOrder === 'desc' ? b.createdAt - a.createdAt : a.createdAt - b.createdAt);
+  const sortedGames = useMemo(() => {
+    return [...filteredGames].sort((a, b) => 
+      sortOrder === 'desc' ? b.createdAt - a.createdAt : a.createdAt - b.createdAt
+    );
+  }, [filteredGames, sortOrder]);
 
   const handleAddGameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
