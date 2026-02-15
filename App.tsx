@@ -110,6 +110,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'cards-game-war',
+    title: 'Cards Game War',
+    url: 'https://cards12.vercel.app/',
+    description: 'Experience the classic game of War! Battle against the dealer in this fast-paced card game where high card wins. Simple, addictive, and perfect for a quick match.',
+    tags: ['Classic', 'Cards', 'Casual'],
+    createdAt: Date.now() + 900
+  },
+  {
     id: 'bat-shooter',
     title: 'Bat Shooter',
     url: 'https://bar-shooter.vercel.app/',
@@ -195,7 +203,7 @@ const App: React.FC = () => {
   const [newGameTitle, setNewGameTitle] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v27';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v28';
 
   // Debounce mechanism for search
   useEffect(() => {

@@ -226,9 +226,18 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
           {game.title}
         </h3>
         
-        <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-4 flex-grow">
-          {game.description}
-        </p>
+        <div className="relative group/desc mb-4 flex-grow">
+          <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">
+            {game.description}
+          </p>
+          {/* Custom Description Tooltip */}
+          <div className="absolute bottom-full left-0 mb-2 w-full invisible group-hover/desc:visible opacity-0 group-hover/desc:opacity-100 transition-all duration-200 z-[110] pointer-events-none">
+            <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-3 rounded-xl text-xs shadow-2xl border border-slate-700/50 ring-1 ring-white/5 backdrop-blur-md">
+              {game.description}
+            </div>
+            <div className="w-3 h-3 bg-slate-900 dark:bg-slate-950 border-b border-r border-slate-700/50 rotate-45 ml-4 -mt-1.5"></div>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-1.5 mb-5">
           {game.tags.slice(0, 3).map(tag => (
@@ -251,10 +260,25 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
            </div>
 
            <div className="flex items-center gap-1">
-             <button onClick={handleShareTwitter} className="p-1.5 text-slate-400 hover:text-[#1DA1F2] transition-colors" title="Twitter">
+             <button 
+              onClick={handleShareTwitter} 
+              className="p-2 text-slate-400 hover:text-[#1DA1F2] hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all duration-200 hover:scale-110 active:scale-95" 
+              title="Twitter"
+             >
                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
              </button>
-             <button onClick={handleCopyLink} className={`p-1.5 transition-all ${copied ? 'text-emerald-500 scale-110' : 'text-slate-400 hover:text-primary'}`} title="Copy Link">
+             <button 
+              onClick={handleShareFacebook} 
+              className="p-2 text-slate-400 hover:text-[#1877F2] hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all duration-200 hover:scale-110 active:scale-95" 
+              title="Facebook"
+             >
+               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+             </button>
+             <button 
+              onClick={handleCopyLink} 
+              className={`p-2 transition-all rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 ${copied ? 'text-emerald-500 scale-125' : 'text-slate-400 hover:text-primary hover:scale-110'}`} 
+              title="Copy Link"
+             >
                {copied ? (
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                ) : (
@@ -262,7 +286,10 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
                )}
              </button>
              {canShare && (
-               <button onClick={handleNativeShare} className="p-1.5 text-slate-400 hover:text-primary transition-colors">
+               <button 
+                onClick={handleNativeShare} 
+                className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all duration-200 hover:scale-110 active:scale-95"
+               >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                </button>
              )}
