@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { GameCard } from './components/GameCard';
 import { AdBanner } from './components/AdBanner';
 import { Game } from './types';
-import { generateGameMetadata } from './services/geminiService';
 
 // Game Overlay Component for in-app play with controls
 const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onClose }) => {
@@ -110,6 +110,22 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'dizingoff',
+    title: 'Dizingoff',
+    url: 'https://dizengoff.vercel.app',
+    description: 'Explore the vibrant streets of Dizingoff in this exciting adventure.',
+    tags: ['Adventure', 'Casual'],
+    createdAt: Date.now() + 1100
+  },
+  {
+    id: 'duck',
+    title: 'Duck',
+    url: 'https://duckduck2.vercel.app',
+    description: 'A fun and quirky game featuring a duck. Quack your way to victory!',
+    tags: ['Casual', 'Arcade', 'Funny'],
+    createdAt: Date.now() + 1000
+  },
+  {
     id: 'cards-game-war',
     title: 'Cards Game War',
     url: 'https://cards12.vercel.app/',
@@ -203,7 +219,7 @@ const App: React.FC = () => {
   const [newGameTitle, setNewGameTitle] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v28';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v29';
 
   // Debounce mechanism for search
   useEffect(() => {
@@ -254,15 +270,12 @@ const App: React.FC = () => {
     e.preventDefault();
     if (!newGameUrl || !newGameTitle) return;
 
-    setIsGenerating(true);
-    const metadata = await generateGameMetadata(newGameTitle, newGameUrl);
-    
     const newGame: Game = {
       id: `game-${Date.now()}`,
       title: newGameTitle,
       url: newGameUrl,
-      description: metadata?.description || "A new game added to the gallery.",
-      tags: metadata?.tags || ["Casual"],
+      description: "A new game added to the gallery.",
+      tags: ["Casual"],
       createdAt: Date.now(),
     };
 
@@ -281,28 +294,28 @@ const App: React.FC = () => {
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">
-            Your Ultimate <span className="text-primary">Web Game</span> Collection
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase italic">
+            Noam Gold <span className="text-primary">Arcade</span>
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-            Curate, play, and share your favorite browser-based games in one stunning, streamlined gallery.
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-medium">
+            Next-generation web gaming collection.
           </p>
         </div>
 
         {/* TOP AD PLACEMENT */}
         <AdBanner slot="TOP_BANNER_SLOT_ID" className="mb-12" />
 
-        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-8 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-12 shadow-sm flex flex-col xl:flex-row items-center gap-4 sticky top-24 z-30">
           <div className="relative flex-grow w-full xl:w-auto">
             <input
               type="text"
-              placeholder="Search games..."
-              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all pl-11 shadow-inner"
+              placeholder="Search games, genres, or titles..."
+              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all pl-12 shadow-inner"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <svg className="absolute left-3.5 top-3 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-4 top-3.5 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -310,27 +323,17 @@ const App: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-end">
             <button 
               onClick={() => setIsAddingGame(true)}
-              className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2"
+              className="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest shadow-lg transition-all flex items-center gap-2 transform active:scale-95"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-              Add Game
+              Add New
             </button>
-
             <div className="flex items-center gap-4">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-slate-100 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 outline-none font-medium shadow-sm"
+                className="bg-slate-100 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 outline-none font-bold"
               >
                 {allCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-              </select>
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-                className="bg-slate-100 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 outline-none font-medium shadow-sm"
-              >
-                <option value="desc">Newest First</option>
-                <option value="asc">Oldest First</option>
               </select>
             </div>
           </div>
@@ -341,7 +344,6 @@ const App: React.FC = () => {
             {sortedGames.map((game, index) => (
               <React.Fragment key={game.id}>
                 <GameCard game={game} onPlay={setPlayingGame} />
-                {/* IN-FEED AD PLACEMENT: Every 6 items */}
                 {(index + 1) % 6 === 0 && (
                   <div className="sm:col-span-2 lg:col-span-3">
                     <AdBanner slot={`IN_FEED_SLOT_${index}`} format="fluid" layoutKey="-fb+5w+4e-db+86" />
@@ -352,8 +354,8 @@ const App: React.FC = () => {
           </div>
         ) : (
           <div className="text-center py-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/30">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No games found</h3>
-            <button onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }} className="text-primary font-bold underline">Reset all filters</button>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No games matched your search</h3>
+            <button onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }} className="text-primary font-bold underline">Reset Browsing</button>
           </div>
         )}
 
@@ -363,56 +365,52 @@ const App: React.FC = () => {
 
       {/* Add Game Modal */}
       {isAddingGame && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white dark:bg-card border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Add New Game</h3>
-                <button onClick={() => setIsAddingGame(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-card border-2 border-primary/20 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="p-8">
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Register Game</h3>
+                <button onClick={() => setIsAddingGame(false)} className="text-slate-400 hover:text-white">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
-              <form onSubmit={handleAddGameSubmit} className="space-y-4">
+              <form onSubmit={handleAddGameSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Game Title</label>
+                  <label className="block text-xs font-black text-primary mb-2 uppercase tracking-widest">Game Title</label>
                   <input
                     required
                     type="text"
-                    placeholder="e.g. Find Treasure"
-                    className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                    placeholder="Enter Game Name"
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none font-bold"
                     value={newGameTitle}
                     onChange={(e) => setNewGameTitle(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Game URL</label>
+                  <label className="block text-xs font-black text-primary mb-2 uppercase tracking-widest">Target URL</label>
                   <input
                     required
                     type="url"
-                    placeholder="https://example.com"
-                    className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                    placeholder="https://game-link.com"
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none font-bold"
                     value={newGameUrl}
                     onChange={(e) => setNewGameUrl(e.target.value)}
                   />
                 </div>
-                <div className="pt-4">
-                  <button
-                    disabled={isGenerating}
-                    type="submit"
-                    className="w-full bg-primary hover:bg-secondary disabled:bg-slate-400 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        AI Generating Metadata...
-                      </>
-                    ) : 'Add to Gallery'}
-                  </button>
-                </div>
+                <button
+                  disabled={isGenerating}
+                  type="submit"
+                  className="w-full bg-primary hover:bg-secondary disabled:bg-slate-700 text-white font-black py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
+                >
+                  {isGenerating ? 'ADDING...' : 'Add to Collection'}
+                </button>
               </form>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
-               <p className="text-[10px] text-slate-500 text-center italic">AI will automatically analyze your game to generate descriptions and tags.</p>
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 border-t border-slate-100 dark:border-slate-700">
+               <div className="flex items-center gap-3">
+                 <div className="p-2 bg-primary/10 rounded-lg"><svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+                 <p className="text-[10px] text-slate-500 font-bold uppercase leading-tight tracking-widest">Add your favorite web games to the collection.</p>
+               </div>
             </div>
           </div>
         </div>

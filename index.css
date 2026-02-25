@@ -6,6 +6,61 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+/* Colorful Theme Overrides */
+html.colorful {
+  --color-primary: #ec4899; /* pink-500 */
+  --color-secondary: #8b5cf6; /* violet-500 */
+}
+
+html.colorful body {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  color: #1e293b;
+}
+
+html.colorful .bg-slate-50, html.colorful .dark\:bg-dark {
+  background-color: #fdfbfb !important;
+  background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
+}
+
+html.colorful .bg-white\/80, html.colorful .dark\:bg-dark\/80 {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(12px);
+}
+
+html.colorful .text-slate-900, html.colorful .dark\:text-slate-100 {
+  color: #1e293b !important;
+}
+
+html.colorful .bg-slate-900, html.colorful .dark\:bg-slate-800 {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+html.colorful .text-slate-400, html.colorful .dark\:text-slate-400 {
+  color: #64748b !important;
+}
+
+html.colorful .border-slate-800, html.colorful .dark\:border-slate-800,
+html.colorful .border-slate-200, html.colorful .dark\:border-slate-700 {
+  border-color: rgba(236, 72, 153, 0.2) !important;
+}
+
+html.colorful .bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+html.colorful .text-primary {
+  color: var(--color-primary) !important;
+}
+
+html.colorful .from-primary {
+  --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position) !important;
+}
+
+html.colorful .to-secondary {
+  --tw-gradient-to: var(--color-secondary) var(--tw-gradient-to-position) !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
