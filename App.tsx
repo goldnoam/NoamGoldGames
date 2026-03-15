@@ -110,6 +110,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'space-game',
+    title: 'Space Game',
+    url: 'https://space-game-gray.vercel.app/',
+    description: 'Explore the cosmos in this exciting space adventure.',
+    tags: ['Space', 'Action', 'Arcade'],
+    createdAt: Date.now() + 1500
+  },
+  {
     id: 'passover',
     title: 'Passover',
     url: 'https://passover1.vercel.app',
