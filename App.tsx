@@ -110,6 +110,30 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'miklat-games',
+    title: 'Miklat Games',
+    url: 'https://miklat1.vercel.app/',
+    description: 'A collection of fun games from Miklat.',
+    tags: ['Arcade', 'Casual', 'Collection'],
+    createdAt: Date.now() + 2500
+  },
+  {
+    id: 'vending-machine',
+    title: 'Vending Machine',
+    url: 'https://vending12.vercel.app/',
+    description: 'Experience the thrill of a virtual vending machine.',
+    tags: ['Simulation', 'Casual', 'Funny'],
+    createdAt: Date.now() + 2400
+  },
+  {
+    id: 'glow-sallon',
+    title: 'Glow Sallon',
+    url: 'https://glow12.vercel.app/',
+    description: 'Step into the Glow Sallon for a vibrant and stylish experience.',
+    tags: ['Casual', 'Simulation', 'Style'],
+    createdAt: Date.now() + 2300
+  },
+  {
     id: 'hungry-seahorse',
     title: 'Hungry Seahorse',
     url: 'https://hungry-seahorsesea.vercel.app/',
@@ -303,7 +327,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v31';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v32';
 
   // Debounce mechanism for search
   useEffect(() => {
