@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 type Theme = 'dark' | 'light' | 'colorful';
 
 interface HeaderProps {
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
+  // Props removed
 }
 
-export const Header: React.FC<HeaderProps> = ({ searchQuery = '', onSearchChange }) => {
+export const Header: React.FC<HeaderProps> = () => {
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
@@ -51,22 +50,6 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery = '', onSearchChange
           </h1>
         </div>
 
-        {/* Header Search Bar */}
-        <div className="flex-grow max-w-md hidden md:block">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Quick search..."
-              className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-transparent outline-none transition-all pl-10"
-              value={searchQuery}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-            />
-            <svg className="absolute left-3 top-2.5 w-4 h-4 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-        </div>
-        
         <div className="flex items-center gap-3">
           <div className="hidden sm:block">
             <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold tracking-tighter text-slate-500 dark:text-slate-400 uppercase border border-slate-200 dark:border-slate-700">

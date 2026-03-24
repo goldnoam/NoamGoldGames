@@ -294,12 +294,8 @@ const App: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
-  const [isAddingGame, setIsAddingGame] = useState(false);
-  const [newGameUrl, setNewGameUrl] = useState('');
-  const [newGameTitle, setNewGameTitle] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v29';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v30';
 
   // Debounce mechanism for search
   useEffect(() => {
@@ -346,32 +342,9 @@ const App: React.FC = () => {
     );
   }, [filteredGames, sortOrder]);
 
-  const handleAddGameSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newGameUrl || !newGameTitle) return;
-
-    const newGame: Game = {
-      id: `game-${Date.now()}`,
-      title: newGameTitle,
-      url: newGameUrl,
-      description: "A new game added to the gallery.",
-      tags: ["Casual"],
-      createdAt: Date.now(),
-    };
-
-    const updatedGames = [newGame, ...games];
-    setGames(updatedGames);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedGames));
-    
-    setNewGameUrl('');
-    setNewGameTitle('');
-    setIsAddingGame(false);
-    setIsGenerating(false);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/30 transition-colors duration-300">
-      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <Header />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         <div className="text-center mb-12">
@@ -401,12 +374,6 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-end">
-            <button 
-              onClick={() => setIsAddingGame(true)}
-              className="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest shadow-lg transition-all flex items-center gap-2 transform active:scale-95"
-            >
-              Add New
-            </button>
             <div className="flex items-center gap-4">
               <select
                 value={selectedCategory}
@@ -442,59 +409,6 @@ const App: React.FC = () => {
         {/* BOTTOM AD PLACEMENT */}
         <AdBanner slot="BOTTOM_BANNER_SLOT_ID" className="mt-16" />
       </main>
-
-      {/* Add Game Modal */}
-      {isAddingGame && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-          <div className="bg-white dark:bg-card border-2 border-primary/20 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="p-8">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Register Game</h3>
-                <button onClick={() => setIsAddingGame(false)} className="text-slate-400 hover:text-white">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              </div>
-              <form onSubmit={handleAddGameSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-xs font-black text-primary mb-2 uppercase tracking-widest">Game Title</label>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Enter Game Name"
-                    className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none font-bold"
-                    value={newGameTitle}
-                    onChange={(e) => setNewGameTitle(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-black text-primary mb-2 uppercase tracking-widest">Target URL</label>
-                  <input
-                    required
-                    type="url"
-                    placeholder="https://game-link.com"
-                    className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none font-bold"
-                    value={newGameUrl}
-                    onChange={(e) => setNewGameUrl(e.target.value)}
-                  />
-                </div>
-                <button
-                  disabled={isGenerating}
-                  type="submit"
-                  className="w-full bg-primary hover:bg-secondary disabled:bg-slate-700 text-white font-black py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
-                >
-                  {isGenerating ? 'ADDING...' : 'Add to Collection'}
-                </button>
-              </form>
-            </div>
-            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 border-t border-slate-100 dark:border-slate-700">
-               <div className="flex items-center gap-3">
-                 <div className="p-2 bg-primary/10 rounded-lg"><svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
-                 <p className="text-[10px] text-slate-500 font-bold uppercase leading-tight tracking-widest">Add your favorite web games to the collection.</p>
-               </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <Footer />
       {playingGame && <GameOverlay game={playingGame} onClose={() => setPlayingGame(null)} />}
