@@ -110,6 +110,54 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'trivia',
+    title: 'Trivia',
+    url: 'https://trivia12.vercel.app/',
+    description: 'Test your knowledge with this fun and challenging trivia game.',
+    tags: ['Trivia', 'Educational', 'Casual'],
+    createdAt: Date.now() + 2100
+  },
+  {
+    id: 'grandma-revenge',
+    title: 'Grandma Revenge',
+    url: 'https://grandma-revenge.vercel.app/',
+    description: 'Help Grandma get her revenge in this hilarious action game.',
+    tags: ['Action', 'Funny', 'Arcade'],
+    createdAt: Date.now() + 2000
+  },
+  {
+    id: 'canoe-racer',
+    title: 'Canoe Racer',
+    url: 'https://canoe-racer.vercel.app/',
+    description: 'Race your canoe through challenging waters and obstacles.',
+    tags: ['Racing', 'Sports', 'Arcade'],
+    createdAt: Date.now() + 1900
+  },
+  {
+    id: 'monkey-forest',
+    title: 'Monkey Forest',
+    url: 'https://monkey-forest-jump.vercel.app/',
+    description: 'Jump through the forest as a monkey in this addictive arcade game.',
+    tags: ['Arcade', 'Casual', 'Adventure'],
+    createdAt: Date.now() + 1800
+  },
+  {
+    id: 'octopus-gunner',
+    title: 'Octopus Gunner',
+    url: 'https://octopus-gunner.vercel.app/',
+    description: 'Defend the ocean as an octopus with a gun in this action-packed shooter.',
+    tags: ['Action', 'Shooter', 'Arcade'],
+    createdAt: Date.now() + 1700
+  },
+  {
+    id: 'pac-ai',
+    title: 'PacAI',
+    url: 'https://pac-ai.vercel.app/',
+    description: 'A modern AI-enhanced twist on the classic maze-running game.',
+    tags: ['Arcade', 'Classic', 'AI'],
+    createdAt: Date.now() + 1600
+  },
+  {
     id: 'space-game',
     title: 'Space Game',
     url: 'https://space-game-gray.vercel.app/',
