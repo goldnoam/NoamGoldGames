@@ -110,6 +110,14 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'hungry-seahorse',
+    title: 'Hungry Seahorse',
+    url: 'https://hungry-seahorsesea.vercel.app/',
+    description: 'Help the hungry seahorse find food in the deep blue sea.',
+    tags: ['Casual', 'Arcade', 'Nature'],
+    createdAt: Date.now() + 2200
+  },
+  {
     id: 'trivia',
     title: 'Trivia',
     url: 'https://trivia12.vercel.app/',
@@ -295,7 +303,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v30';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v31';
 
   // Debounce mechanism for search
   useEffect(() => {
