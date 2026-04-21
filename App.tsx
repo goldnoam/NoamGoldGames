@@ -110,6 +110,22 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'elicopter',
+    title: 'Elicopter',
+    url: 'https://elicopter.vercel.app/',
+    description: 'Master the skies in this intense helicopter simulation.',
+    tags: ['Action', 'Arcade', 'Simulation'],
+    createdAt: Date.now() + 2700
+  },
+  {
+    id: 'hormoz-mine-sweeper',
+    title: 'Hormoz Mine Sweeper',
+    url: 'https://minessweep.vercel.app/',
+    description: 'Classic minesweeper challenge set in the Hormoz region.',
+    tags: ['Strategy', 'Puzzle', 'Classic'],
+    createdAt: Date.now() + 2600
+  },
+  {
     id: 'miklat-games',
     title: 'Miklat Games',
     url: 'https://miklat1.vercel.app/',
@@ -327,7 +343,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v32';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v33';
 
   // Debounce mechanism for search
   useEffect(() => {
