@@ -110,6 +110,86 @@ const GameOverlay: React.FC<{ game: Game; onClose: () => void }> = ({ game, onCl
 // Default initial data
 const INITIAL_GAMES: Game[] = [
   {
+    id: 'fox-rider',
+    title: 'מסע עולמי עם שועל',
+    url: 'https://foxrider.vercel.app/',
+    description: 'צאו למסע עולמי מרתק ומלא הרפתקאות יחד עם השועל החכם והזריז!',
+    tags: ['Adventure', 'Casual', 'Hebrew'],
+    createdAt: Date.now() + 3700
+  },
+  {
+    id: 'toucan-tokens',
+    title: 'אסוף טוקנים',
+    url: 'https://toucan12.vercel.app/',
+    description: 'עזרו לציפור הטוקן המקסימה לאסוף כמה שיותר טוקנים ופרסים ביער הטרופי!',
+    tags: ['Arcade', 'Casual', 'Hebrew'],
+    createdAt: Date.now() + 3600
+  },
+  {
+    id: 'penguins-game',
+    title: 'פינגווינים',
+    url: 'https://penguins12.vercel.app/',
+    description: 'הרפתקה קפואה ומשעשעת עם הפינגווינים הכי חמודים בקוטב הדרומי!',
+    tags: ['Casual', 'Arcade', 'Hebrew'],
+    createdAt: Date.now() + 3500
+  },
+  {
+    id: 'lion-roar',
+    title: 'מבצע שאגת הארי',
+    url: 'https://lion-roar3.vercel.app/',
+    description: 'הצטרפו למבצע שאגת הארי הנועז וגלו את כוחות הטבע ואומץ הלב!',
+    tags: ['Action', 'Adventure', 'Hebrew'],
+    createdAt: Date.now() + 3400
+  },
+  {
+    id: 'park-dog-chase',
+    title: 'מרדף בפארק',
+    url: 'https://park-dog-chase.vercel.app/',
+    description: 'רוצו, תמרנו והשתתפו במרדף הכלבים הכי מהיר ומטורף בפארק העירוני!',
+    tags: ['Action', 'Arcade', 'Hebrew'],
+    createdAt: Date.now() + 3300
+  },
+  {
+    id: 'aqua-pup',
+    title: 'כלב ים שאוכל דגים להנאתו',
+    url: 'https://aqua-pup.vercel.app/',
+    description: 'שלטו בכלב הים המתוק, צללו במים עמוקים ועזרו לו לאכול דגים טעימים להנאתו!',
+    tags: ['Casual', 'Arcade', 'Hebrew'],
+    createdAt: Date.now() + 3200
+  },
+  {
+    id: 'dodo-feast',
+    title: 'אסוף צורות גאומטריות',
+    url: 'https://dodo-feast.vercel.app/',
+    description: 'בחרו את הדרכים הנכונות ואספו צורות גאומטריות צבעוניות במשחק חשיבה וזריזות!',
+    tags: ['Puzzle', 'Educational', 'Hebrew'],
+    createdAt: Date.now() + 3100
+  },
+  {
+    id: 'need4seed',
+    title: 'אסוף גרעינים עם סנאי',
+    url: 'https://need4seed.vercel.app/',
+    description: 'עזרו לסנאי החרוץ לאסוף כמה שיותר גרעינים ובלוטים לפני שהחורף מגיע!',
+    tags: ['Arcade', 'Casual', 'Hebrew'],
+    createdAt: Date.now() + 3000
+  },
+  {
+    id: 'falafel-seller',
+    title: 'מוכר הפלאפל',
+    url: 'https://falafel12.vercel.app/',
+    description: 'הכינו פלאפל מדהים ושרתו את הלקוחות הרעבים במשחק סימולציה ישראלי קלאסי ומהנה!',
+    tags: ['Simulation', 'Casual', 'Hebrew'],
+    createdAt: Date.now() + 2900
+  },
+  {
+    id: 'aviron-ice-cream',
+    title: 'אבי רון מחלק הגלידות והמטריות',
+    url: 'https://aviron12.vercel.app/',
+    description: 'עזרו לאבי רון לחלק גלידות בקיץ ומטריות בחורף במשחק הרפתקאות וזריזות ישראלי משעשע!',
+    tags: ['Action', 'Arcade', 'Hebrew'],
+    createdAt: Date.now() + 2800
+  },
+  {
     id: 'elicopter',
     title: 'Elicopter',
     url: 'https://elicopter.vercel.app/',
@@ -343,7 +423,7 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [playingGame, setPlayingGame] = useState<Game | null>(null);
 
-  const STORAGE_KEY = 'noam_gold_games_gallery_v33';
+  const STORAGE_KEY = 'noam_gold_games_gallery_v35';
 
   // Debounce mechanism for search
   useEffect(() => {
